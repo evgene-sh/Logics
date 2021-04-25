@@ -1,4 +1,3 @@
-import numpy as np
 from logic import TableFunction
 
 
@@ -26,34 +25,34 @@ def compose_functions(f, g):
 
     if f.dim == 1 and g.dim == 1:
         tables.append(
-            np.array([bytes(f(g(i)), 'utf-8') for i in f.values.keys()]))
+            tuple(f(g(i)) for i in f.values.keys()))
 
     elif f.dim == 2 and g.dim == 2:
         tables.append(
-            np.array([[bytes(f(g(i, j), i), 'utf-8') for j in f.values.keys()] for i in f.values.keys()]))
+            tuple(tuple(f(g(i, j), i) for j in f.values.keys()) for i in f.values.keys()))
 
         tables.append(
-            np.array([[bytes(f(g(i, j), j), 'utf-8') for j in f.values.keys()] for i in f.values.keys()]))
+            tuple(tuple(f(g(i, j), j) for j in f.values.keys()) for i in f.values.keys()))
 
         tables.append(
-            np.array([[bytes(f(i, g(i, j)), 'utf-8') for j in f.values.keys()] for i in f.values.keys()]))
+            tuple(tuple(f(i, g(i, j)) for j in f.values.keys()) for i in f.values.keys()))
 
         tables.append(
-            np.array([[bytes(f(j, g(i, j)), 'utf-8') for j in f.values.keys()] for i in f.values.keys()]))
+            tuple(tuple(f(j, g(i, j)) for j in f.values.keys()) for i in f.values.keys()))
 
     elif f.dim == 1 and g.dim == 2:
         tables.append(
-            np.array([[bytes(f(g(i, j)), 'utf-8') for j in f.values.keys()] for i in f.values.keys()]))
+            tuple(tuple(f(g(i, j)) for j in f.values.keys()) for i in f.values.keys()))
 
     elif f.dim == 2 and g.dim == 1:
         tables.append(
-            np.array([[bytes(f(g(i), j), 'utf-8') for j in f.values.keys()] for i in f.values.keys()]))
+            tuple(tuple(f(g(i), i) for j in f.values.keys()) for i in f.values.keys()))
 
         tables.append(
-            np.array([[bytes(f(i, g(j)), 'utf-8') for j in f.values.keys()] for i in f.values.keys()]))
+            tuple(tuple(f(i, g(j)) for j in f.values.keys()) for i in f.values.keys()))
 
         tables.append(
-            np.array([[bytes(f(g(i), g(j)), 'utf-8') for j in f.values.keys()] for i in f.values.keys()]))
+            tuple(tuple(f(g(i), g(j)) for j in f.values.keys()) for i in f.values.keys()))
 
     else:
         raise NotImplementedError('Пары функции таких размерностей не проработаны:' + str(f.dim) + str(g.dim))

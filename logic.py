@@ -1,6 +1,3 @@
-import numpy as np
-
-
 class Logic:
     def __init__(self, mvlog):
         self.name = mvlog.name
@@ -16,10 +13,24 @@ class Logic:
 
     def _parse_function(self, f):
         dim = len(f.sentences[0][0])
-        table = np.chararray([len(self.values)] * dim)
 
-        for sentence in f.sentences:
-            table[tuple(self.values[sentence[0][i]] for i in range(dim))] = sentence[1]
+        if dim == 1:
+            table = [''] * len(self.values)
+            for sentence in f.sentences:
+                table[self.values[sentence[0][0]]] = sentence[1]
+            table = tuple(table)
+
+        elif dim == 2:
+            table = [[''] * len(self.values) for _ in range(len(self.values))]
+            for sentence in f.sentences:
+                table[self.values[sentence[0][0]]][self.values[sentence[0][1]]] = sentence[1]
+
+            for i in range(len(self.values)):
+                table[i] = tuple(table[i])
+            table = tuple(table)
+
+        else:
+            raise NotImplementedError('Can\'t work with dimensions: ' + str(dim))
 
         return table, dim
 
@@ -35,21 +46,21 @@ class TableFunction:
         self.data = data
         self.dim = dim
         self.values = values
-        self._hash = hash(str(self.data))
 
     def __call__(self, *args):
-        return self.data[tuple(self.values[arg] for arg in args)].decode()
+        data = self.data
+        for arg in args:
+            data = data[self.values[arg]]
+        return data
 
     def __str__(self):
-        return self.name + '\n' + str(self.data) + '\n'
+        return self.name + '\n' + '\n'.join([str(data) for data in self.data]) + '\n'
 
     def __repr__(self):
         return '\n' + self.__str__() + '\n'
 
     def __eq__(self, other):
-        return self.values == other.values and (self.data == other.data).all()
+        return self.values == other.values and self.data == other.data
 
     def __hash__(self):
-        return self._hash
-
-# TODO Change numpy.array data to a simple type
+        return hash(self.data)
