@@ -9,7 +9,7 @@ class Logic:
 
     def _parse(self, mvlog):
         table_functions = list(map(
-            lambda f: TableFunction(f.name, self._parse_function(f), mvlog.values),
+            lambda f: TableFunction(f.name, *self._parse_function(f), mvlog.values),
             mvlog.functions))
 
         return table_functions
@@ -17,12 +17,11 @@ class Logic:
     def _parse_function(self, f):
         dim = len(f.sentences[0][0])
         table = np.chararray([len(self.values)] * dim)
-        print(*f.sentences, sep='\n', end='\n\n')
 
         for sentence in f.sentences:
             table[tuple(self.values[sentence[0][i]] for i in range(dim))] = sentence[1]
 
-        return table
+        return table, dim
 
     def __str__(self):
         return 'Name: ' + self.name + '\n' + \
@@ -31,14 +30,15 @@ class Logic:
 
 
 class TableFunction:
-    def __init__(self, name, data, values):
+    def __init__(self, name, data, dim, values):
         self.name = name
         self.data = data
+        self.dim = dim
         self.values = values
         self._hash = hash(str(self.data))
 
     def __call__(self, *args):
-        return self.data[[self.values[arg].decode() for arg in args]]
+        return self.data[tuple(self.values[arg] for arg in args)].decode()
 
     def __str__(self):
         return self.name + '\n' + str(self.data) + '\n'
@@ -51,3 +51,5 @@ class TableFunction:
 
     def __hash__(self):
         return self._hash
+
+# TODO Change numpy.array data to a simple type
