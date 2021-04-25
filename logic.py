@@ -41,6 +41,7 @@ class Logic:
 
 
 class TableFunction:
+    """Представление функций в логиках"""
     def __init__(self, name, data, dim, values):
         self.name = name
         self.data = data

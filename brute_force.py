@@ -1,4 +1,23 @@
+"""Алгоритмы анализа и сравнения логик"""
+
 from logic import TableFunction
+
+
+def compare_logics(logic1, logic2):
+    if logic1.values != logic2.values:
+        return 'non-comparable'
+
+    dominance1 = set(logic2.functions) <= generate_functions_of_logic(logic1)
+    dominance2 = set(logic1.functions) <= generate_functions_of_logic(logic2)
+
+    if dominance1 and dominance2:
+        return 'equivalent'
+    elif dominance1:
+        return 'embedded'
+    elif dominance2:
+        return 'embeds'
+    else:
+        return 'non-comparable'
 
 
 def generate_functions_of_logic(logic):
@@ -18,6 +37,7 @@ def generate_functions_of_logic(logic):
 
 
 def compose_functions(f, g):
+    """создание функций из всевозможных композиций f(g)"""
     if f.values != g.values:
         return set()
 

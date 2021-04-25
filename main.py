@@ -10,7 +10,7 @@ def parse(path):
 
 klini = parse('data/Klini.mvlog')
 
-
 functions = generate_functions_of_logic(klini)
-
 print(*functions, sep='\n')
+
+# print(compare_logics(klini, klini))
