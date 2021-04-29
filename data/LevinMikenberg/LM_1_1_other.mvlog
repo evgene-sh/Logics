@@ -1,0 +1,26 @@
+Name = LevinMikenberg_1_1_alter
+Values = [0, D, T, 1]
+
+And {
+  1 1 = 1;
+  s.x s.y = 0;
+}
+
+Or {
+  1 s.x = 1;
+  s.x 1 = 1;
+  s.x s.y = 0;
+}
+
+Imply {
+  0 s.x = 1;
+  T s.x = 1;
+  D s.x = 1;
+  1 1 = 1;
+  s.x s.y = 0;
+}
+
+Not {
+  1 = 0;
+  s.x = 1;
+}

@@ -1,6 +1,8 @@
 from mvlog import Mvlog
 from logic import Logic
 from brute_force import *
+import itertools
+import os
 
 
 def parse(path):
@@ -8,9 +10,13 @@ def parse(path):
     return Logic(mvlog)
 
 
-klini = parse('data/Klini.mvlog')
+path = 'data/LevinMikenberg/'
+files = tuple(map(lambda x: path + x, os.listdir(path)))
 
-functions = generate_functions_of_logic(klini)
-print(*functions, sep='\n')
+# files = ['data/LevinMikenberg/LM_1_1.mvlog', 'data/LevinMikenberg/LM_1_4.mvlog']
+logics = [parse(file) for file in files]
 
-# print(compare_logics(klini, klini))
+# print(*logics, sep='\n\n')
+
+for l1, l2 in itertools.combinations(logics, 2):
+    print(l1.name, l2.name, compare_logics(l1, l2))

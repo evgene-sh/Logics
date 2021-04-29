@@ -1,3 +1,6 @@
+import itertools
+
+
 class Logic:
     def __init__(self, mvlog):
         self.name = mvlog.name
@@ -17,13 +20,40 @@ class Logic:
         if dim == 1:
             table = [''] * len(self.values)
             for sentence in f.sentences:
-                table[self.values[sentence[0][0]]] = sentence[1]
+                if sentence[0][0].startswith('s.'):
+                    for i in range(len(table)):
+                        if table[i] == '':
+                            table[i] = sentence[1]
+                else:
+                    table[self.values[sentence[0][0]]] = sentence[1]
             table = tuple(table)
 
         elif dim == 2:
             table = [[''] * len(self.values) for _ in range(len(self.values))]
+
             for sentence in f.sentences:
-                table[self.values[sentence[0][0]]][self.values[sentence[0][1]]] = sentence[1]
+                if sentence[0][0].startswith('s.') and sentence[0][1].startswith('s.'):
+                    if sentence[0][0] != sentence[0][1]:
+                        for i, j in itertools.permutations(range(len(table)), 2):
+                            if table[i][j] == '':
+                                table[i][j] = sentence[1]
+
+                    for i in range(len(table)):
+                        if table[i][i] == '':
+                            table[i][i] = sentence[1]
+
+                elif sentence[0][0].startswith('s.') and not sentence[0][1].startswith('s.'):
+                    for i in range(len(table)):
+                        if table[i][self.values[sentence[0][1]]] == '':
+                            table[i][self.values[sentence[0][1]]] = sentence[1]
+
+                elif not sentence[0][0].startswith('s.') and sentence[0][1].startswith('s.'):
+                    for i in range(len(table)):
+                        if table[self.values[sentence[0][0]]][i] == '':
+                            table[self.values[sentence[0][0]]][i] = sentence[1]
+
+                else:
+                    table[self.values[sentence[0][0]]][self.values[sentence[0][1]]] = sentence[1]
 
             for i in range(len(self.values)):
                 table[i] = tuple(table[i])
@@ -36,7 +66,7 @@ class Logic:
 
     def __str__(self):
         return 'Name: ' + self.name + '\n' + \
-               'Values: ' + str(self.values) + '\n' + \
+               'Values: ' + str(list(self.values.keys())) + '\n' + \
                'Functions: ' + '\n' + str(self.functions)
 
 

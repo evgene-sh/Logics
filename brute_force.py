@@ -63,10 +63,12 @@ def compose_functions(f, g):
     elif f.dim == 1 and g.dim == 2:
         tables.append(
             tuple(tuple(f(g(i, j)) for j in f.values.keys()) for i in f.values.keys()))
+        tables.append(
+            tuple(f(g(i, i)) for i in f.values.keys()))
 
     elif f.dim == 2 and g.dim == 1:
         tables.append(
-            tuple(tuple(f(g(i), i) for j in f.values.keys()) for i in f.values.keys()))
+            tuple(tuple(f(g(i), j) for j in f.values.keys()) for i in f.values.keys()))
 
         tables.append(
             tuple(tuple(f(i, g(j)) for j in f.values.keys()) for i in f.values.keys()))
@@ -77,7 +79,7 @@ def compose_functions(f, g):
     else:
         raise NotImplementedError('Пары функции таких размерностей не проработаны:' + str(f.dim) + str(g.dim))
 
-    functions = set(map(lambda table: TableFunction('nameless', table, max(f.dim, g.dim), f.values), tables))
+    functions = set(map(lambda table: TableFunction('nameless', table, 2 if type(table[0]) == tuple else 1, f.values), tables))
 
     return functions
 
