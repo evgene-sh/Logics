@@ -1,6 +1,6 @@
-from mvlog import Mvlog
-from logic import Logic
-from brute_force import compare_logics
+from algorithm.mvlog import Mvlog
+from algorithm.logic import Logic
+from algorithm.brute_force import compare_logics
 import itertools
 import os
 from sys import argv

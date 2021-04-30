@@ -1,6 +1,6 @@
 """Алгоритмы анализа и сравнения логик"""
 
-from logic import TableFunction
+from algorithm.logic import TableFunction
 
 
 def compare_logics(logic1, logic2):
