@@ -77,6 +77,7 @@ class TableFunction:
         self.data = data
         self.dim = dim
         self.values = values
+        self.is_symmetric = TableFunction._is_symmetric(self.data, self.dim)
 
     def __call__(self, *args):
         data = self.data
@@ -95,3 +96,13 @@ class TableFunction:
 
     def __hash__(self):
         return hash(self.data)
+
+    @staticmethod
+    def _is_symmetric(data, dim):
+        if dim > 1:
+            for i in range(len(data)):
+                for j in range(i+1, len(data[i])):
+                    if data[i][j] != data[j][i]:
+                        return False
+
+        return True
