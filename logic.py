@@ -8,7 +8,7 @@ class Logic:
         self.functions = self._parse(mvlog)
 
     def _parse(self, mvlog):
-        table_functions = list(map(
+        table_functions = tuple(map(
             lambda f: TableFunction(f.name, *self._parse_function(f), mvlog.values),
             mvlog.functions))
 
@@ -91,7 +91,7 @@ class TableFunction:
         return '\n' + self.__str__() + '\n'
 
     def __eq__(self, other):
-        return self.values == other.values and self.data == other.data
+        return self.data == other.data
 
     def __hash__(self):
         return hash(self.data)

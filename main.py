@@ -13,10 +13,14 @@ def parse(path):
 path = 'data/LevinMikenberg/'
 files = tuple(map(lambda x: path + x, os.listdir(path)))
 
-# files = ['data/LevinMikenberg/LM_1_1.mvlog', 'data/LevinMikenberg/LM_1_4.mvlog']
 logics = [parse(file) for file in files]
 
 # print(*logics, sep='\n\n')
 
+
+from time import perf_counter
+
+start = perf_counter()
 for l1, l2 in itertools.combinations(logics, 2):
     print(l1.name, l2.name, compare_logics(l1, l2))
+print(perf_counter()-start)

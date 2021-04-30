@@ -7,8 +7,8 @@ def compare_logics(logic1, logic2):
     if logic1.values != logic2.values:
         return 'non-comparable'
 
-    dominance1 = set(logic2.functions) <= generate_functions_of_logic(logic1)
-    dominance2 = set(logic1.functions) <= generate_functions_of_logic(logic2)
+    dominance1 = check_dominance(logic1, logic2)
+    dominance2 = check_dominance(logic2, logic1)
 
     if dominance1 and dominance2:
         return 'equivalent'
@@ -20,8 +20,9 @@ def compare_logics(logic1, logic2):
         return 'non-comparable'
 
 
-def generate_functions_of_logic(logic):
+def check_dominance(logic, logic2):
     new_functions, loop_functions = set(logic.functions),  set(logic.functions)
+    functions_need_to_find = set(logic2.functions)
 
     while len(loop_functions):
         temp_functions = set()
@@ -33,7 +34,10 @@ def generate_functions_of_logic(logic):
         loop_functions = temp_functions - new_functions
         new_functions.update(temp_functions)
 
-    return new_functions
+        if functions_need_to_find <= new_functions:
+            return True
+
+    return False
 
 
 def compose_functions(f, g):
