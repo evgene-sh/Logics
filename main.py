@@ -29,4 +29,3 @@ def algorithm(path):
 if __name__ == '__main__':
     for res in algorithm(argv[1]):
         print(res[0], res[1], ':', res[2])
-

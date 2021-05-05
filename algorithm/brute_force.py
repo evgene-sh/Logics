@@ -58,12 +58,12 @@ def compose_functions(f, g):
         tables.append(
             tuple(tuple(f(g(i, j), j) for j in f.values.keys()) for i in f.values.keys()))
 
-        if not f.is_symmetric:
-            tables.append(
-                tuple(tuple(f(i, g(i, j)) for j in f.values.keys()) for i in f.values.keys()))
+        #if not f.is_symmetric:
+        tables.append(
+            tuple(tuple(f(i, g(i, j)) for j in f.values.keys()) for i in f.values.keys()))
 
-            tables.append(
-                tuple(tuple(f(j, g(i, j)) for j in f.values.keys()) for i in f.values.keys()))
+        tables.append(
+            tuple(tuple(f(j, g(i, j)) for j in f.values.keys()) for i in f.values.keys()))
 
     elif f.dim == 1 and g.dim == 2:
         tables.append(
@@ -75,9 +75,9 @@ def compose_functions(f, g):
         tables.append(
             tuple(tuple(f(g(i), j) for j in f.values.keys()) for i in f.values.keys()))
 
-        if not f.is_symmetric:
-            tables.append(
-                tuple(tuple(f(i, g(j)) for j in f.values.keys()) for i in f.values.keys()))
+        #if not f.is_symmetric:
+        tables.append(
+            tuple(tuple(f(i, g(j)) for j in f.values.keys()) for i in f.values.keys()))
 
         tables.append(
             tuple(tuple(f(g(i), g(j)) for j in f.values.keys()) for i in f.values.keys()))
