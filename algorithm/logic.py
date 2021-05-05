@@ -6,6 +6,7 @@ class Logic:
         self.name = mvlog.name
         self.values = mvlog.values
         self.functions = self._parse(mvlog)
+        self.eq_vals = self._get_equal_values()
 
     def _parse(self, mvlog):
         table_functions = tuple(map(
@@ -63,6 +64,29 @@ class Logic:
             raise NotImplementedError('Can\'t work with dimensions: ' + str(dim))
 
         return table, dim
+
+    def _get_equal_values(self):
+        equals = set()
+        for v1, v2 in itertools.combinations(self.values, 2):
+            equal = True
+
+            for f in self.functions:
+                if f.dim == 1:
+                    if f(v1) != f(v2):
+                        equal = False
+                        break
+                elif f.dim == 2:
+                    for v in self.values:
+                        if f(v1, v) != f(v2, v) or f(v, v1) != f(v, v2):
+                            equal = False
+                            break
+                else:
+                    raise NotImplementedError('Не реализовано equals для 2+ мерных функций')
+
+            if equal:
+                equals.add((min(v1, v2), max(v1, v2)))
+
+        return equals
 
     def __str__(self):
         return 'Name: ' + self.name + '\n' + \

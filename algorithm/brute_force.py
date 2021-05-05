@@ -21,7 +21,12 @@ def compare_logics(logic1, logic2):
 
 
 def check_dominance(logic, logic2):
-    new_functions, loop_functions = set(logic.functions),  set(logic.functions)
+    # Проверка на неразличимость значений
+    if not logic.eq_vals <= logic2.eq_vals:
+        return False
+
+    # Сравнение
+    new_functions, loop_functions = set(logic.functions), set(logic.functions)
     functions_need_to_find = set(logic2.functions)
 
     while len(loop_functions):
@@ -58,7 +63,7 @@ def compose_functions(f, g):
         tables.append(
             tuple(tuple(f(g(i, j), j) for j in f.values.keys()) for i in f.values.keys()))
 
-        #if not f.is_symmetric:
+        # if not f.is_symmetric:
         tables.append(
             tuple(tuple(f(i, g(i, j)) for j in f.values.keys()) for i in f.values.keys()))
 
@@ -75,7 +80,7 @@ def compose_functions(f, g):
         tables.append(
             tuple(tuple(f(g(i), j) for j in f.values.keys()) for i in f.values.keys()))
 
-        #if not f.is_symmetric:
+        # if not f.is_symmetric:
         tables.append(
             tuple(tuple(f(i, g(j)) for j in f.values.keys()) for i in f.values.keys()))
 
@@ -85,7 +90,8 @@ def compose_functions(f, g):
     else:
         raise NotImplementedError('Пары функции таких размерностей не проработаны:' + str(f.dim) + str(g.dim))
 
-    functions = set(map(lambda table: TableFunction('nameless', table, 2 if type(table[0]) == tuple else 1, f.values), tables))
+    functions = set(
+        map(lambda table: TableFunction('nameless', table, 2 if type(table[0]) == tuple else 1, f.values), tables))
 
     return functions
 
