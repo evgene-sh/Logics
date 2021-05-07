@@ -1,6 +1,7 @@
 """Алгоритмы анализа и сравнения логик"""
 
 from algorithm.logic import TableFunction
+import itertools
 
 
 def compare_logics(logic1, logic2):
@@ -24,6 +25,20 @@ def check_dominance(logic, logic2):
     # Проверка на неразличимость значений
     if not logic.eq_vals <= logic2.eq_vals:
         return False
+
+    # Проверка ОЗ(4)
+    for f_check in logic2.functions:
+        for length in range(len(logic.values)):
+            for s in itertools.combinations(logic.values.keys(), length):
+                is_closure = True
+                for f in logic.functions:
+                    if not f.set_is_closure(s):
+                        is_closure = False
+                        break
+
+                if is_closure:
+                    if not f_check.set_is_closure(s):
+                        return False
 
     # Сравнение
     new_functions, loop_functions = set(logic.functions), set(logic.functions)

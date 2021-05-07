@@ -121,6 +121,25 @@ class TableFunction:
     def __hash__(self):
         return hash(self.data)
 
+    def set_is_closure(self, s):
+        if self.dim == 1:
+            for val in s:
+                if self(val) not in s:
+                    return False
+            return True
+
+        elif self.dim == 2:
+            for v1, v2 in itertools.permutations(s, 2):
+                if self(v1, v2) not in s:
+                    return False
+            for val in s:
+                if self(val, val ) not in s:
+                    return False
+            return True
+
+        else:
+            raise NotImplementedError('Проверка замыкания не реализована для  dim 2+')
+
     @staticmethod
     def _is_symmetric(data, dim):
         if dim > 1:
