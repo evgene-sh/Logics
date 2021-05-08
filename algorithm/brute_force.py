@@ -28,7 +28,7 @@ def check_dominance(logic, logic2):
 
     # ПРОВЕРКА ОЗ(4) ########################
     for f_check in logic2.functions:
-        for length in range(len(logic.values)):
+        for length in range(1, len(logic.values)):
             for s in itertools.combinations(logic.values.keys(), length):
                 is_closure = True
                 for f in logic.functions:
@@ -47,7 +47,7 @@ def check_dominance(logic, logic2):
 
     closure_sets = []
     # поиск множеств значений, которое на всех функциях отображается в себя
-    for length in range(len(logic.values)):
+    for length in range(1, len(logic.values)):
         for w in itertools.combinations(logic.values.keys(), length):
             is_closure = True
             for f in logic.functions + logic2.functions:
