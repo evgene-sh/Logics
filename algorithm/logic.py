@@ -93,6 +93,10 @@ class Logic:
                'Values: ' + str(list(self.values.keys())) + '\n' + \
                'Functions: ' + '\n' + str(self.functions)
 
+    @property
+    def value_area(self):
+        return set().union(*[f.value_area for f in self.functions])
+
 
 class TableFunction:
     """Представление функций в логиках"""
@@ -102,6 +106,7 @@ class TableFunction:
         self.dim = dim
         self.values = values
         self.is_symmetric = TableFunction._is_symmetric(self.data, self.dim)
+        self.value_area = TableFunction._value_area(self.data, self.dim)
 
     def __call__(self, *args):
         data = self.data
@@ -133,12 +138,29 @@ class TableFunction:
                 if self(v1, v2) not in s:
                     return False
             for val in s:
-                if self(val, val ) not in s:
+                if self(val, val) not in s:
                     return False
             return True
 
         else:
             raise NotImplementedError('Проверка замыкания не реализована для  dim 2+')
+
+    def set_able_to_out(self, s):
+        if self.dim == 1:
+            for val in s:
+                if self(val) not in s:
+                    return True
+            return False
+
+        elif self.dim == 2:
+            for val in s:
+                for other in self.values.keys():
+                    if self(val, other) not in s or self(other, val) not in s:
+                        return True
+            return False
+
+        else:
+            raise NotImplementedError('Проверка возможности выхода не реализована для  dim 2+')
 
     @staticmethod
     def _is_symmetric(data, dim):
@@ -149,3 +171,13 @@ class TableFunction:
                         return False
 
         return True
+
+    @staticmethod
+    def _value_area(data, dim):
+        if dim == 1:
+            return set(data)
+        else:
+            area = set()
+            for row in data:
+                area.update(row)
+            return area

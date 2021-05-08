@@ -26,7 +26,7 @@ def check_dominance(logic, logic2):
     if not logic.eq_vals <= logic2.eq_vals:
         return False
 
-    # Проверка ОЗ(4)
+    # ПРОВЕРКА ОЗ(4) ########################
     for f_check in logic2.functions:
         for length in range(len(logic.values)):
             for s in itertools.combinations(logic.values.keys(), length):
@@ -39,10 +39,52 @@ def check_dominance(logic, logic2):
                 if is_closure:
                     if not f_check.set_is_closure(s):
                         return False
+    #########################################
 
-    # Сравнение
-    new_functions, loop_functions = set(logic.functions), set(logic.functions)
-    functions_need_to_find = set(logic2.functions)
+    # ПРОВЕРКА ОЗ(5) ########################
+    if not logic.value_area >= logic2.value_area:
+        return False
+
+    closure_sets = []
+    # поиск множеств значений, которое на всех функциях отображается в себя
+    for length in range(len(logic.values)):
+        for w in itertools.combinations(logic.values.keys(), length):
+            is_closure = True
+            for f in logic.functions + logic2.functions:
+                if not f.set_is_closure(w):
+                    is_closure = False
+                    break
+            if is_closure:
+                closure_sets.append(set(w))
+
+    found_functions = []
+    for w in closure_sets:
+        # поиск всех функций o, которые получают значения за пределами w
+        for o in logic2.functions:
+            if o.value_area > w:
+                o_have_two_vals = False
+                # проверка, что есть хотя-бы два значения: v1 o v2 -> not w
+                for vs in itertools.permutations(o.value_area-w, o.dim):
+                    if o(*vs) not in w:
+                        o_have_two_vals = True
+                        break
+                if o_have_two_vals:
+                    # o найдено. проверка набора функций для ее выведения
+                    gs = list(filter(lambda g: g.value_area > w, logic.functions))
+                    if sum(g.set_able_to_out(w) for g in gs) == 0:
+                        if find_functions([o], gs):
+                            found_functions.append(o)
+                        else:
+                            return False
+    #########################################
+
+    return find_functions(set(logic2.functions) - set(found_functions), logic.functions)
+
+
+def find_functions(need_functions, have_functions):
+    """Поиск нужных функций путем перебора композиций имеющихся"""
+    new_functions, loop_functions = set(have_functions), set(have_functions)
+    functions_need_to_find = set(need_functions)
 
     while len(loop_functions):
         temp_functions = set()
