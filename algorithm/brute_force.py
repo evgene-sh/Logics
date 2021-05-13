@@ -92,7 +92,8 @@ def find_functions(need_functions, have_functions):
         for f in loop_functions:
             for g in new_functions:
                 temp_functions.update(compose_functions(f, g))
-                temp_functions.update(compose_functions(g, f))
+                if g not in loop_functions:
+                    temp_functions.update(compose_functions(g, f))
 
         loop_functions = temp_functions - new_functions
         new_functions.update(temp_functions)
