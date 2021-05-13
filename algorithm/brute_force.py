@@ -27,17 +27,17 @@ def check_dominance(logic, logic2):
         return False
 
     # ПРОВЕРКА ОЗ(4) ########################
-    for f_check in logic2.functions:
-        for length in range(1, len(logic.values)):
-            for s in itertools.combinations(logic.values.keys(), length):
-                is_closure = True
-                for f in logic.functions:
-                    if not f.set_is_closure(s):
-                        is_closure = False
-                        break
+    for length in range(1, len(logic.values)):
+        for s in itertools.combinations(logic.values.keys(), length):
+            is_closure = True
+            for f in logic.functions:
+                if not f.set_is_closure(s):
+                    is_closure = False
+                    break
 
-                if is_closure:
-                    if not f_check.set_is_closure(s):
+            if is_closure:
+                for g in logic2.functions:
+                    if not g.set_is_closure(s):
                         return False
     #########################################
 
@@ -92,6 +92,7 @@ def find_functions(need_functions, have_functions):
         for f in loop_functions:
             for g in new_functions:
                 temp_functions.update(compose_functions(f, g))
+                temp_functions.update(compose_functions(g, f))
 
         loop_functions = temp_functions - new_functions
         new_functions.update(temp_functions)

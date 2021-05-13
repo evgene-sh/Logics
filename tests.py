@@ -4,7 +4,7 @@ from main import algorithm
 
 class TestAlgorithm(unittest.TestCase):
 
-    def test_levin_mikenberg(self):
+    def test_LM_1to4(self):
 
         def lm(l1, l2):
             l1 = [int(l1[-3]), int(l1[-1])]
@@ -25,6 +25,38 @@ class TestAlgorithm(unittest.TestCase):
             return 'non-comparable'
 
         for n, res in enumerate(algorithm('testing/data/LevinMikenberg/')):
+            with self.subTest(i=n):
+                self.assertEqual(lm(res[0], res[1]), res[2], str(res[0]) + ' vs ' + str(res[1]))
+
+    def test_LM_15_16(self):
+
+        def lm(l1, l2):
+            l1 = [int(l1[-3]), int(l1[-1])]
+            l2 = [int(l2[-3]), int(l2[-1])]
+
+            if l1 in [[3, 4], [4, 3]] and l2 in [[3, 4], [4, 3]]:
+                return 'equivalent'
+
+            return 'non-comparable'
+
+        for n, res in enumerate(algorithm('testing/data/LM1516/')):
+            with self.subTest(i=n):
+                self.assertEqual(lm(res[0], res[1]), res[2], str(res[0]) + ' vs ' + str(res[1]))
+
+    def test_LM_115(self):
+
+        def lm(l1, l2):
+            l1 = [l1[-3], l1[-1]]
+            l2 = [l2[-3], l2[-1]]
+
+            if l1 == ['1', '3']:
+                return 'embeds'
+            if l2 == ['1', '3']:
+                return 'embedded'
+
+            return 'equivalent'
+
+        for n, res in enumerate(algorithm('testing/data/LM115/')):
             with self.subTest(i=n):
                 self.assertEqual(lm(res[0], res[1]), res[2], str(res[0]) + ' vs ' + str(res[1]))
 
