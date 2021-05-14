@@ -117,6 +117,9 @@ def compose_functions(f, g):
 
     elif f.dim == 2 and g.dim == 2:
         tables.append(
+            tuple(tuple(f(g(i, j), g(i, j)) for j in f.values.keys()) for i in f.values.keys()))
+
+        tables.append(
             tuple(tuple(f(g(i, j), i) for j in f.values.keys()) for i in f.values.keys()))
 
         if not g.is_symmetric:
