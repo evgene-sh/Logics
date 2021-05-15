@@ -4,6 +4,11 @@ from main import algorithm
 
 class TestAlgorithm(unittest.TestCase):
 
+    def go(self, lm, path):
+        for n, res in enumerate(algorithm(path)):
+            with self.subTest(i=n):
+                self.assertEqual(lm(res[0], res[1]), res[2], str(res[0]) + ' vs ' + str(res[1]))
+
     def test_LM_1to4(self):
 
         def lm(l1, l2):
@@ -24,9 +29,7 @@ class TestAlgorithm(unittest.TestCase):
                 return 'embeds'
             return 'non-comparable'
 
-        for n, res in enumerate(algorithm('testing/data/LevinMikenberg/')):
-            with self.subTest(i=n):
-                self.assertEqual(lm(res[0], res[1]), res[2], str(res[0]) + ' vs ' + str(res[1]))
+        self.go(lm, 'testing/data/LevinMikenberg/')
 
     def test_LM_15_16(self):
 
@@ -39,9 +42,7 @@ class TestAlgorithm(unittest.TestCase):
 
             return 'non-comparable'
 
-        for n, res in enumerate(algorithm('testing/data/LM1516/')):
-            with self.subTest(i=n):
-                self.assertEqual(lm(res[0], res[1]), res[2], str(res[0]) + ' vs ' + str(res[1]))
+        self.go(lm, 'testing/data/LM1516/')
 
     def test_LM_115(self):
 
@@ -56,8 +57,19 @@ class TestAlgorithm(unittest.TestCase):
 
             return 'equivalent'
 
-        for n, res in enumerate(algorithm('testing/data/LM115/')):
-            with self.subTest(i=n):
-                self.assertEqual(lm(res[0], res[1]), res[2], str(res[0]) + ' vs ' + str(res[1]))
+        self.go(lm, 'testing/data/LM115/')
+
+    def test_LM_17(self):
+
+        def lm(l1, l2):
+            l1 = [l1[-3], l1[-1]]
+            l2 = [l2[-3], l2[-1]]
+
+            if l1 == ['1', '7']:
+                return 'embedded'
+            else:
+                return 'embeds'
+
+        self.go(lm, 'testing/data/LM17/')
 
 # TODO make subtest printing right after its completion
