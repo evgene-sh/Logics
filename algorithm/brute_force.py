@@ -1,6 +1,7 @@
 """Алгоритмы анализа и сравнения логик"""
 
 from algorithm.logic import TableFunction
+from algorithm.optimizations import value_area_1, value_area_2
 import itertools
 
 
@@ -21,87 +22,116 @@ def compare_logics(logic1, logic2):
         return 'non-comparable'
 
 
-def check_dominance(logic, logic2):
+def check_dominance(logic1, logic2):
     # Проверка на неразличимость значений
-    if not logic.eq_vals <= logic2.eq_vals:
+    if not logic1.eq_vals <= logic2.eq_vals:
+        return False
+
+    # Проверка области отображения
+    if not logic1.value_area >= logic2.value_area:
         return False
 
     # ПРОВЕРКА ОЗ(4) ########################
-    for length in range(1, len(logic.values)):
-        for s in itertools.combinations(logic.values.keys(), length):
-            is_closure = True
-            for f in logic.functions:
-                if not f.set_is_closure(s):
-                    is_closure = False
-                    break
-
-            if is_closure:
-                for g in logic2.functions:
-                    if not g.set_is_closure(s):
-                        return False
-    #########################################
-
-    # ПРОВЕРКА ОЗ(5) ########################
-    if not logic.value_area >= logic2.value_area:
+    if not value_area_1(logic1, logic2):
         return False
 
-    closure_sets = []
-    # поиск множеств значений, которое на всех функциях отображается в себя
-    for length in range(1, len(logic.values)):
-        for w in itertools.combinations(logic.values.keys(), length):
-            is_closure = True
-            for f in logic.functions + logic2.functions:
-                if not f.set_is_closure(w):
-                    is_closure = False
-                    break
-            if is_closure:
-                closure_sets.append(set(w))
-
-    found_functions = []
-    for w in closure_sets:
-        # поиск всех функций o, которые получают значения за пределами w
-        for o in logic2.functions:
-            if o.value_area > w:
-                o_have_two_vals = False
-                # проверка, что есть хотя-бы два значения: v1 o v2 -> not w
-                for vs in itertools.permutations(o.value_area-w, o.dim):
-                    if o(*vs) not in w:
-                        o_have_two_vals = True
-                        break
-                if o_have_two_vals:
-                    # o найдено. проверка набора функций для ее выведения
-                    gs = list(filter(lambda g: g.value_area > w, logic.functions))
-                    if sum(g.set_able_to_out(w) for g in gs) == 0:
-                        if find_functions([o], gs):
-                            found_functions.append(o)
-                        else:
-                            return False
-    #########################################
-
-    return find_functions(set(logic2.functions) - set(found_functions), logic.functions)
+    # # ПРОВЕРКА ОЗ(5) ########################
+    # found = value_area_2(logic1, logic2, find_functions)
+    # if found is False:
+    #     return False
+    # return find_functions(set(logic2.functions) - set(found), logic1.functions)
+    return find_functions2(logic2.functions, logic1.functions)
 
 
 def find_functions(need_functions, have_functions):
     """Поиск нужных функций путем перебора композиций имеющихся"""
-    new_functions, loop_functions = set(have_functions), set(have_functions)
-    functions_need_to_find = set(need_functions)
+    checked, to_check = set(have_functions), set(have_functions)
+    need = set(need_functions)
 
-    while len(loop_functions):
-        temp_functions = set()
+    while len(to_check):
+        new = set()
 
-        for f in loop_functions:
-            for g in new_functions:
-                temp_functions.update(compose_functions(f, g))
-                if g not in loop_functions:
-                    temp_functions.update(compose_functions(g, f))
+        for f in to_check:
+            for g in checked:
+                new.update(compose_functions(f, g))
+                if g not in to_check:
+                    new.update(compose_functions(g, f))
 
-        loop_functions = temp_functions - new_functions
-        new_functions.update(temp_functions)
+        to_check = new - checked
+        checked.update(new)
 
-        if functions_need_to_find <= new_functions:
+        if need <= checked:
             return True
 
     return False
+
+
+def find_functions2(need_functions, have_functions):
+    checked, to_check = set(), set()
+    need = set(filter(lambda f: f.dim == 2, need_functions))
+    for uno in filter(lambda f: f.dim == 1, need_functions):
+        need.add(TableFunction(
+            tuple(tuple(uno(i) for j in have_functions[0].values.keys()) for i in have_functions[0].values.keys()),
+            have_functions[0].values
+        ))
+
+    to_check.add(TableFunction(
+        tuple(tuple(i for j in have_functions[0].values.keys()) for i in have_functions[0].values.keys()),
+        have_functions[0].values
+    ))
+    to_check.add(TableFunction(
+        tuple(tuple(j for j in have_functions[0].values.keys()) for i in have_functions[0].values.keys()),
+        have_functions[0].values
+    ))
+    for v in ('1', '0'):
+        to_check.add(TableFunction(
+            tuple(tuple(v for j in have_functions[0].values.keys()) for i in have_functions[0].values.keys()),
+            have_functions[0].values
+        ))
+    checked.update(to_check)
+
+    while len(to_check):
+        new = set()
+
+        for k in to_check:
+            for p in checked:
+                new.update(compose_functions2(k, p, have_functions))
+
+        to_check = new - checked
+        checked.update(to_check)
+
+        if need <= checked:
+            return True
+    print(len(checked))
+    return False
+
+
+def compose_functions2(k, p, base):
+    tables = []
+
+    for operation in base:
+        if operation.dim == 1:
+            compose_1d_operation(k, operation, tables)
+        else:  # operator.dim == 2
+            compose_2d_operation(k, p, operation, tables, not operation.is_symmetric and k != p)
+
+    functions = set(
+        map(lambda table: TableFunction(table, k.values),
+            tables))
+
+    return functions
+
+
+def compose_1d_operation(f, operation, tables):
+    tables.append(
+        tuple(tuple(operation(f(i, j)) for j in f.values.keys()) for i in f.values.keys()))
+
+
+def compose_2d_operation(f, g, operation, tables, reflection):
+    tables.append(
+        tuple(tuple(operation(f(i, j), g(i, j)) for j in f.values.keys()) for i in f.values.keys()))
+    if reflection:
+        compose_2d_operation(g, f, operation, tables, False)
 
 
 def compose_functions(f, g):
@@ -155,7 +185,7 @@ def compose_functions(f, g):
         raise NotImplementedError('Пары функции таких размерностей не проработаны:' + str(f.dim) + str(g.dim))
 
     functions = set(
-        map(lambda table: TableFunction('nameless', table, 2 if type(table[0]) == tuple else 1, f.values), tables))
+        map(lambda table: TableFunction(table, f.values), tables))
 
     return functions
 

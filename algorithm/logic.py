@@ -10,7 +10,7 @@ class Logic:
 
     def _parse(self, mvlog):
         table_functions = tuple(map(
-            lambda f: TableFunction(f.name, *self._parse_function(f), mvlog.values),
+            lambda f: TableFunction(self._parse_function(f), mvlog.values, f.name),
             mvlog.functions))
 
         return table_functions
@@ -63,7 +63,7 @@ class Logic:
         else:
             raise NotImplementedError('Can\'t work with dimensions: ' + str(dim))
 
-        return table, dim
+        return table
 
     def _get_equal_values(self):
         equals = set()
@@ -100,11 +100,11 @@ class Logic:
 
 class TableFunction:
     """Представление функций в логиках"""
-    def __init__(self, name, data, dim, values):
-        self.name = name
+    def __init__(self, data, values, name=''):
         self.data = data
-        self.dim = dim
+        self.dim = 2 if type(data[0]) == tuple else 1
         self.values = values
+        self.name = name
         self.is_symmetric = TableFunction._is_symmetric(self.data, self.dim)
         self.value_area = TableFunction._value_area(self.data, self.dim)
 
