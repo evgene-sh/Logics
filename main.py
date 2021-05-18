@@ -4,6 +4,7 @@ from algorithm.brute_force import compare_logics
 import itertools
 import os
 from sys import argv
+from algorithm.optimizations import Transitivity
 
 
 def parse(path):
@@ -22,8 +23,18 @@ def algorithm(path):
     """Основной алгоритм"""
     logics = get_logics(path)
 
+    transitivity = Transitivity([l.name for l in logics])
+
     for l1, l2 in itertools.combinations(logics, 2):
-        yield l1.name, l2.name, compare_logics(l1, l2)
+
+        if transitivity(l1.name, l2.name):
+            result = transitivity(l1.name, l2.name)
+
+        else:
+            result = compare_logics(l1, l2)
+            transitivity.update(l1.name, result, l2.name)
+
+        yield l1.name, l2.name, result
 
 
 if __name__ == '__main__':
