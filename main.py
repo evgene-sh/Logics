@@ -5,6 +5,10 @@ import itertools
 import os
 from sys import argv
 from algorithm.optimizations import Transitivity
+import logging
+
+
+# logging.basicConfig(level=logging.DEBUG)
 
 
 def parse(path):
