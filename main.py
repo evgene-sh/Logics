@@ -1,6 +1,6 @@
 from algorithm.mvlog import Mvlog
 from algorithm.logic import Logic
-from algorithm.brute_force import compare_logics
+from algorithm.brute_force import compare_logics, find_functions, find_functions2
 import itertools
 import os
 from sys import argv
@@ -35,7 +35,7 @@ def algorithm(path):
             result = transitivity(l1.name, l2.name)
 
         else:
-            result = compare_logics(l1, l2)
+            result = compare_logics(l1, l2, find_functions)
             transitivity.update(l1.name, result, l2.name)
 
         yield l1.name, l2.name, result
@@ -44,3 +44,7 @@ def algorithm(path):
 if __name__ == '__main__':
     for res in algorithm(argv[1]):
         print(res[0], res[1], ':', res[2])
+
+
+# TODO: подумать над объектно-ориентированной реализацией брутфорсов
+# TODO: сделать агрегированный брутфорс

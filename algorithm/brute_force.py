@@ -5,12 +5,12 @@ from algorithm.optimizations import value_area_1, value_area_2
 import logging
 
 
-def compare_logics(logic1, logic2):
+def compare_logics(logic1, logic2, brute_force):
     if logic1.values != logic2.values:
         return 'non-comparable'
 
-    dominance1 = check_dominance(logic1, logic2)
-    dominance2 = check_dominance(logic2, logic1)
+    dominance1 = check_dominance(logic1, logic2, brute_force)
+    dominance2 = check_dominance(logic2, logic1, brute_force)
 
     if dominance1 and dominance2:
         return 'equivalent'
@@ -22,7 +22,7 @@ def compare_logics(logic1, logic2):
         return 'non-comparable'
 
 
-def check_dominance(logic1, logic2):
+def check_dominance(logic1, logic2, brute_force):
     logging.debug('\033[34m' + logic1.name + ' над ' + logic2.name + '\033[37m')
 
     # Проверка на неразличимость значений
@@ -38,11 +38,14 @@ def check_dominance(logic1, logic2):
         return False
 
     # ПРОВЕРКА ОЗ(5) ########################
-    found = value_area_2(logic1, logic2, find_functions)
+    found = value_area_2(logic1, logic2, brute_force)
     if found is False:
         return False
 
-    return find_functions(set(logic2.functions) - set(found), logic1.functions)
+    return brute_force(set(logic2.functions) - set(found), logic1.functions)
+
+
+################### первый переборочный алгоритм ###################
 
 
 def find_functions(need_functions, have_functions):
@@ -79,49 +82,44 @@ def compose_functions(f, g):
         return set()
 
     tables = []
+    values = tuple(f.values.keys())
 
-    if f.dim == 1 and g.dim == 1:
-        tables.append(
-            tuple(f(g(i)) for i in f.values.keys()))
-
-    elif f.dim == 2 and g.dim == 2:
-        tables.append(
-            tuple(tuple(f(g(i, j), g(i, j)) for j in f.values.keys()) for i in f.values.keys()))
-
-        tables.append(
-            tuple(tuple(f(g(i, j), i) for j in f.values.keys()) for i in f.values.keys()))
-
-        if not g.is_symmetric:
+    if f.dim == 1:
+        if g.dim == 1:
             tables.append(
-                tuple(tuple(f(g(i, j), j) for j in f.values.keys()) for i in f.values.keys()))
+                tuple(f(g(i)) for i in values))
 
-        if not f.is_symmetric:
+        else:  # g.dim == 2
             tables.append(
-                tuple(tuple(f(i, g(i, j)) for j in f.values.keys()) for i in f.values.keys()))
+                tuple(tuple(f(g(i, j)) for j in values) for i in values))
+            tables.append(
+                tuple(f(g(i, i)) for i in values))
 
-            if not g.is_symmetric:
+    else:  # f.dim == 2
+        if g.dim == 1:
+            tables.append(
+                tuple(tuple(f(g(i), j) for j in values) for i in values))
+            tables.append(
+                tuple(tuple(f(i, g(j)) for j in values) for i in values))
+            tables.append(
+                tuple(tuple(f(g(i), g(j)) for j in values) for i in values))
+
+        else:  # g.dim == 2
+            if f == g:
                 tables.append(
-                    tuple(tuple(f(j, g(i, j)) for j in f.values.keys()) for i in f.values.keys()))
+                    tuple(tuple(f(i, i) for j in values) for i in values))
+                tables.append(
+                    tuple(tuple(f(j, j) for j in values) for i in values))
+                if not f.is_symmetric:
+                    tables.append(
+                        tuple(tuple(f(j, i) for j in values) for i in values))
 
-    elif f.dim == 1 and g.dim == 2:
-        tables.append(
-            tuple(tuple(f(g(i, j)) for j in f.values.keys()) for i in f.values.keys()))
-        tables.append(
-            tuple(f(g(i, i)) for i in f.values.keys()))
-
-    elif f.dim == 2 and g.dim == 1:
-        tables.append(
-            tuple(tuple(f(g(i), j) for j in f.values.keys()) for i in f.values.keys()))
-
-        if not f.is_symmetric:
             tables.append(
-                tuple(tuple(f(i, g(j)) for j in f.values.keys()) for i in f.values.keys()))
-
-        tables.append(
-            tuple(tuple(f(g(i), g(j)) for j in f.values.keys()) for i in f.values.keys()))
-
-    else:
-        raise NotImplementedError('Пары функции таких размерностей не проработаны:' + str(f.dim) + str(g.dim))
+                tuple(tuple(f(g(i, j), g(i, j)) for j in values) for i in values))
+            tables.append(
+                tuple(tuple(f(g(i, j), i) for j in values) for i in values))
+            tables.append(
+                tuple(tuple(f(g(i, j), j) for j in values) for i in values))
 
     functions = set(
         map(lambda table: TableFunction(table, f.values), tables))
