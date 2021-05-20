@@ -131,30 +131,33 @@ def compose_functions(f, g):
 
 
 def find_functions2(need_functions, have_functions):
-    vals = set()
+    values = tuple(have_functions[0].values.keys())
+    value_area = set()
     for f in have_functions:
-        vals.update(f.value_area)
+        value_area.update(f.value_area)
+
+    base_1d = tuple(filter(lambda o: o.dim == 1, have_functions))
+    base_2d = tuple(filter(lambda o: o.dim == 2, have_functions))
 
     checked, to_check = set(), set()
     need = set(filter(lambda f: f.dim == 2, need_functions))
     for uno in filter(lambda f: f.dim == 1, need_functions):
         need.add(TableFunction(
-            tuple(tuple(uno(i) for j in have_functions[0].values.keys()) for i in have_functions[0].values.keys()),
+            tuple(tuple(uno(i) for j in values) for i in values),
             have_functions[0].values
         ))
 
     to_check.add(TableFunction(
-        tuple(tuple(i for j in have_functions[0].values.keys()) for i in have_functions[0].values.keys()),
+        tuple(tuple(i for j in values) for i in values),
         have_functions[0].values
     ))
     to_check.add(TableFunction(
-        tuple(tuple(j for j in have_functions[0].values.keys()) for i in have_functions[0].values.keys()),
+        tuple(tuple(j for j in values) for i in values),
         have_functions[0].values
     ))
-
-    for v in vals:
+    for v in value_area:
         to_check.add(TableFunction(
-            tuple(tuple(v for j in have_functions[0].values.keys()) for i in have_functions[0].values.keys()),
+            tuple(tuple(v for j in values) for i in values),
             have_functions[0].values
         ))
 
@@ -168,8 +171,21 @@ def find_functions2(need_functions, have_functions):
         new = set()
 
         for k in to_check:
+            for o in base_1d:
+                new.add(TableFunction(
+                    tuple(tuple(o(k(i, j)) for j in values) for i in values),
+                    have_functions[0].values))
+
             for p in checked:
-                new.update(compose_functions2(k, p, have_functions))
+                for o in base_2d:
+                    new.add(TableFunction(
+                        tuple(tuple(o(k(i, j), p(i, j)) for j in values) for i in values),
+                        have_functions[0].values))
+                    if not o.is_symmetric and p not in checked:
+                        new.add(TableFunction(
+                            tuple(tuple(o(p(i, j), k(i, j)) for j in values) for i in values),
+                            have_functions[0].values))
+
                 need -= new
                 if len(need) == 0:
                     return True
@@ -178,29 +194,3 @@ def find_functions2(need_functions, have_functions):
         checked.update(to_check)
 
     return False
-
-
-def compose_functions2(k, p, base):
-    tables = []
-
-    for operation in base:
-        if operation.dim == 1:
-            compose_1d_operation(k, operation, tables)
-        else:  # operator.dim == 2
-            compose_2d_operation(k, p, operation, tables, not operation.is_symmetric and k != p)
-
-    return set(map(lambda table: TableFunction(table, k.values), tables))
-
-
-def compose_1d_operation(f, operation, tables):
-    tables.append(
-        tuple(tuple(operation(f(i, j)) for j in f.values.keys()) for i in f.values.keys()))
-
-
-def compose_2d_operation(f, g, operation, tables, reflection):
-    tables.append(
-        tuple(tuple(operation(f(i, j), g(i, j)) for j in f.values.keys()) for i in f.values.keys()))
-    if reflection:
-        compose_2d_operation(g, f, operation, tables, False)
-
-# TODO make the compose_functions to work with functions with any number of arguments
