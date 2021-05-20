@@ -53,6 +53,8 @@ def find_functions(need_functions, have_functions):
     checked, to_check = set(have_functions), set(have_functions)
     need = set(need_functions) - checked
 
+    have_2d = list(filter(lambda o: o.dim == 2, have_functions))
+
     cnt = 0
     while len(to_check):
         logging.debug('    Повтор: ' + str(cnt) + '    новых: ' + str(len(to_check)))
@@ -69,6 +71,19 @@ def find_functions(need_functions, have_functions):
                 need -= new
                 if len(need) == 0:
                     return True
+
+        # Добавление идей второго алгоритма ###########
+        # for f in to_check:
+        #     for g in checked:
+        #         for o in have_2d:
+        #             new.add(compose_functions2(f, g, o))
+        #             if g not in to_check and not o.is_symmetric:
+        #                 new.add(compose_functions2(f, g, o))
+        #
+        #         need -= new
+        #         if len(need) == 0:
+        #             return True
+        ###############################################
 
         to_check = new - checked
         checked.update(to_check)
@@ -121,10 +136,7 @@ def compose_functions(f, g):
             tables.append(
                 tuple(tuple(f(g(i, j), j) for j in values) for i in values))
 
-    functions = set(
-        map(lambda table: TableFunction(table, f.values), tables))
-
-    return functions
+    return map(lambda table: TableFunction(table, f.values), tables)
 
 
 ################### второй переборочный алгоритм ###################
@@ -181,7 +193,7 @@ def find_functions2(need_functions, have_functions):
                     new.add(TableFunction(
                         tuple(tuple(o(k(i, j), p(i, j)) for j in values) for i in values),
                         have_functions[0].values))
-                    if not o.is_symmetric and p not in checked:
+                    if not o.is_symmetric and p not in to_check:
                         new.add(TableFunction(
                             tuple(tuple(o(p(i, j), k(i, j)) for j in values) for i in values),
                             have_functions[0].values))
@@ -194,3 +206,17 @@ def find_functions2(need_functions, have_functions):
         checked.update(to_check)
 
     return False
+
+
+def compose_functions2(f, g, o):
+
+    if f.dim == 2 and g.dim == 2:
+        table = tuple(tuple(o(f(i, j), g(i, j)) for j in f.values.keys()) for i in f.values.keys())
+    elif f.dim == 2 and g.dim == 1:
+        table = tuple(tuple(o(f(i, j), g(j)) for j in f.values.keys()) for i in f.values.keys())
+    elif f.dim == 1 and g.dim == 2:
+        table = tuple(tuple(o(f(i), g(i, j)) for j in f.values.keys()) for i in f.values.keys())
+    else:
+        table = tuple(tuple(o(f(i), g(j)) for j in f.values.keys()) for i in f.values.keys())
+
+    return TableFunction(table, f.values)
