@@ -39,7 +39,7 @@ def check_dominance(logic1, logic2, brute_force):
 
     # ПРОВЕРКА ОЗ(5) ########################
     found = value_area_2(logic1, logic2, brute_force)
-    if found is False:
+    if found is None:
         return False
 
     return brute_force(set(logic2.functions) - set(found), logic1.functions)

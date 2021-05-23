@@ -1,5 +1,6 @@
 from copy import copy
 import itertools
+import logging
 
 
 class Transitivity:
@@ -59,51 +60,85 @@ class Transitivity:
 
 def value_area_1(logic1, logic2):
     for length in range(1, len(logic1.values)):
-        for s in itertools.combinations(logic1.values.keys(), length):
+        for w in itertools.combinations(logic1.values.keys(), length):
             is_closure = True
             for f in logic1.functions:
-                if not f.set_is_closure(s):
+                if not f.set_is_closure(w):
                     is_closure = False
                     break
 
             if is_closure:
                 for g in logic2.functions:
-                    if not g.set_is_closure(s):
+                    if not g.set_is_closure(w):
                         return False
     return True
 
 
+def value_area_2_1(logic1, logic2, find):
+    found_functions = []
+
+    for t in logic2.functions:
+        w = None
+        for g in logic1.functions:
+            if g.value_area < t.value_area:
+                if t.set_is_closure(g.value_area):
+                    if w:
+                        if g.value_area >= w:
+                            w = g.value_area
+                        elif not g.value_area < w:
+                            w = None
+                    else:
+                        w = g.value_area
+            elif w and not g.set_is_closure(w):
+                w = None
+
+        if w:
+            funcs_w = tuple(filter(lambda f: f.value_area > w, logic1.functions))
+            if find([t], funcs_w):
+                found_functions.append(t)
+
+    return found_functions
+
+
 def value_area_2(logic1, logic2, find):
-    closure_sets = []
-    # поиск множеств значений, которое на всех функциях отображается в себя
-    for length in range(1, len(logic1.values)):
-        for w in itertools.combinations(logic1.values.keys(), length):
-            is_closure = True
-            for f in logic1.functions + logic2.functions:
-                if not f.set_is_closure(w):
-                    is_closure = False
-                    break
-            if is_closure:
-                closure_sets.append(set(w))
+    closure_sets = set()
+
+    # выбираю такие оз, которые замкнуты для всех f из logic1
+    for w in set(map(lambda f: frozenset(f.value_area), logic1.functions)):
+        is_closure = True
+        for f in logic1.functions:
+            if not f.set_is_closure(w):
+                is_closure = False
+                break
+        if is_closure:
+            closure_sets.add(w)
 
     found_functions = []
-    for w in closure_sets:
-        # поиск всех функций o, которые получают значения за пределами w
-        for o in logic2.functions:
-            if o.value_area > w:
-                o_have_two_vals = False
-                # проверка, что есть хотя-бы два значения: v1 o v2 -> not w
-                for vs in itertools.permutations(o.value_area - w, o.dim):
-                    if o(*vs) not in w:
-                        o_have_two_vals = True
-                        break
-                if o_have_two_vals:
-                    # o найдено. проверка набора функций для ее выведения
-                    gs = list(filter(lambda g: g.value_area > w, logic1.functions))
-                    if sum(g.set_able_to_out(w) for g in gs) == 0:
-                        if find([o], gs):
-                            found_functions.append(o)
-                        else:
-                            return False
+    # перебираю варианты для каждой искомой o
+    for o in logic2.functions:
+        o_closure = list(filter(lambda w: o.value_area > w and o.set_is_closure(w), closure_sets))
+
+        if len(o_closure) == 0:
+            continue
+
+        # убираю вложенные w
+        for i in range(len(o_closure)):
+            for j in range(i+1, len(o_closure)):
+                if o_closure[i] >= o_closure[j]:
+                    o_closure[j] = None
+                elif o_closure[i] < o_closure[j]:
+                    o_closure[i] = None
+                    break
+
+        can = False
+        for w in tuple(filter(lambda w: w is not None, o_closure)):
+            if find([o], tuple(filter(lambda f: f.value_area > w, logic1.functions))):
+                found_functions.append(o)
+                can = True
+                break
+
+        if not can:
+            logging.debug('    Can not built the ' + o.name)
+            return None
 
     return found_functions

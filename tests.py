@@ -62,14 +62,6 @@ class TestAlgorithm(unittest.TestCase):
     def test_LM_17(self):
 
         def lm(l1, l2):
-            l1 = [l1[-3], l1[-1]]
-            l2 = [l2[-3], l2[-1]]
-
-            if l1 == ['1', '7']:
-                return 'embedded'
-            else:
-                return 'embeds'
+            return 'non-comparable'
 
         self.go(lm, 'testing/data/LM17/')
-
-# TODO make subtest printing right after its completion
