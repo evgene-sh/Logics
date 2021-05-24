@@ -1,0 +1,26 @@
+Name = LevinMikenberg_2_6
+Values = [0, D, T, 1]
+
+And {
+  0 s.x = 0;
+  s.x 0 = 0;
+  s.x s.y = 1;
+}
+
+Or {
+  0 0 = 0;
+  s.x s.y = 1;
+}
+
+Imply {
+  0 0 = 1;
+  0 s.x = 0;
+  s.x s.y = 1;
+}
+
+Not {
+  1 = 0;
+  0 = 1;
+  T = D;
+  D = T;
+}

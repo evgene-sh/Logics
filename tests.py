@@ -31,6 +31,10 @@ class TestAlgorithm(unittest.TestCase):
 
         self.go(lm, 'testing/data/LevinMikenberg/')
 
+    def test_LM_1to4_10(self):
+        for _ in range(100):
+            self.test_LM_1to4()
+
     def test_LM_15_16(self):
 
         def lm(l1, l2):
@@ -65,3 +69,9 @@ class TestAlgorithm(unittest.TestCase):
             return 'non-comparable'
 
         self.go(lm, 'testing/data/LM17/')
+
+    def test_LM(self):
+
+        for n, res in enumerate(algorithm('testing/data/LM/')):
+            with self.subTest(i=n):
+                self.assertIsNotNone(res[2], str(res[0]) + ' vs ' + str(res[1]))

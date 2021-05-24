@@ -1,0 +1,33 @@
+Name = LevinMikenberg_4_9
+Values = [0, D, T, 1]
+
+And {
+  0 s.x = 0;
+  s.x 0 = 0;
+  T s.x = 0;
+  s.x T = 0;
+  s.x s.y = 1;
+}
+
+Or {
+  1 s.x = 1;
+  s.x 1 = 1;
+  D s.x = 1;
+  s.x D = 1;
+  s.x s.y = 0;
+}
+
+Imply {
+  0 s.x = 1;
+  T s.x = 1;
+  s.x 1 = 1;
+  s.x D = 1;
+  s.x s.y = 0;
+}
+
+Not {
+  1 = 0;
+  0 = 1;
+  T = T;
+  D = 1;
+}

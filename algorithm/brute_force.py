@@ -6,6 +6,7 @@ import logging
 
 
 def compare_logics(logic1, logic2, brute_force):
+    """Определение отношения между двумя логиками"""
     if logic1.values != logic2.values:
         return 'non-comparable'
 
@@ -23,6 +24,7 @@ def compare_logics(logic1, logic2, brute_force):
 
 
 def check_dominance(logic1, logic2, brute_force):
+    """Проверка, доминирует ли logic1 над logic2"""
     logging.debug('\033[34m' + logic1.name + ' над ' + logic2.name + '\033[37m')
 
     # Проверка на неразличимость значений

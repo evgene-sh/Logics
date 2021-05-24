@@ -74,32 +74,6 @@ def value_area_1(logic1, logic2):
     return True
 
 
-def value_area_2_1(logic1, logic2, find):
-    found_functions = []
-
-    for t in logic2.functions:
-        w = None
-        for g in logic1.functions:
-            if g.value_area < t.value_area:
-                if t.set_is_closure(g.value_area):
-                    if w:
-                        if g.value_area >= w:
-                            w = g.value_area
-                        elif not g.value_area < w:
-                            w = None
-                    else:
-                        w = g.value_area
-            elif w and not g.set_is_closure(w):
-                w = None
-
-        if w:
-            funcs_w = tuple(filter(lambda f: f.value_area > w, logic1.functions))
-            if find([t], funcs_w):
-                found_functions.append(t)
-
-    return found_functions
-
-
 def value_area_2(logic1, logic2, find):
     closure_sets = set()
 
