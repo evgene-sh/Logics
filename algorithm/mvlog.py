@@ -7,7 +7,6 @@ VALUES_STR = 'Values *= *\[(\S+, *)*\S+\]\n'
 VALUE = '[^\s,]+'
 FUNCTION = '[A-Za-z0-9_]+ *\\{[^\\}]+\\}'
 SENTENCE_STR = '[^\n]+=[^;]+'
-END = '\s*|'
 
 
 class ParsingException(ValueError):

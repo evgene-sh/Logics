@@ -1,0 +1,14 @@
+Name = LevinMikenberg_1_4alt
+Values = [0, D, T, 1]
+
+Imply {
+  1 1 = 1;
+  1 s.x = 0;
+  s.x s.y = 1;
+}
+
+Not {
+  0 = 1;
+  T = 1;
+  s.x = 0;
+}

@@ -145,23 +145,6 @@ class TableFunction:
         else:
             raise NotImplementedError('Проверка замыкания не реализована для  dim 2+')
 
-    def set_able_to_out(self, s):
-        if self.dim == 1:
-            for val in s:
-                if self(val) not in s:
-                    return True
-            return False
-
-        elif self.dim == 2:
-            for val in s:
-                for other in self.values.keys():
-                    if self(val, other) not in s or self(other, val) not in s:
-                        return True
-            return False
-
-        else:
-            raise NotImplementedError('Проверка возможности выхода не реализована для  dim 2+')
-
     @staticmethod
     def _is_symmetric(data, dim):
         if dim > 1:
