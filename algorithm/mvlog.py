@@ -63,12 +63,11 @@ class Function:
         sentences = tuple(map(lambda text:
                               tuple(map(lambda x: x.strip(), text.split('='))),
                               sentences_texts))
-
         sentences = tuple(map(lambda s: (s[0].split(' '), s[1]), sentences))
+
         for sentence in sentences:
             if len(sentence[0]) != len(sentences[0][0]):
                 raise ParsingException('Несовпадение количеств аргументов для функции {} {}'.format(name, file_path))
-
             if len(sentence[1].split(' ')) != 1:
                 raise ParsingException('Количество возвращаемых значений != 1 для функции {} {}'.format(name, file_path))
 
