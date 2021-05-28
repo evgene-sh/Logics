@@ -41,7 +41,7 @@ class Mvlog:
         return name, values, functions
 
     def __str__(self):
-        return 'Name: ' + self.name + '   Values: ' + str(self.values) + '   Functions: ' + str(self.functions)
+        return 'Name: {}  Values: {}  Functions: {}'.format(self.name, self.values, self.functions)
 
     def __repr__(self):
         return self.name

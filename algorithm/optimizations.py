@@ -1,3 +1,5 @@
+"""Оптимизации при сравнении логик"""
+
 from copy import copy
 import itertools
 import logging
@@ -58,7 +60,26 @@ class Transitivity:
                 self.relations[j][i] = 'equivalent'
 
 
-def value_area_1(logic1, logic2):
+def indiscernible_of_values(logic1, logic2):
+    if logic1.eq_vals <= logic2.eq_vals:
+        return True
+
+    logging.debug('values {} are discernible in {}, indiscernible in {}'.format(
+        logic1.eq_vals - logic2.eq_vals, logic2.name, logic1.name))
+    return False
+
+
+def embedding_of_value_area(logic1, logic2):
+    if logic1.value_area >= logic2.value_area:
+        return True
+
+    logging.debug('{} returns {} not generated in {}'.format(
+        logic2.name, logic2.value_area - logic1.value_area, logic1.name))
+    return False
+
+
+# ПРОВЕРКА ОЗ(4) ########################
+def closure_sets(logic1, logic2):
     for length in range(1, len(logic1.values)):
         for w in itertools.combinations(logic1.values.keys(), length):
             is_closure = True
@@ -70,15 +91,18 @@ def value_area_1(logic1, logic2):
             if is_closure:
                 for g in logic2.functions:
                     if not g.set_is_closure(w):
+                        logging.debug('function {} in {} cannot be constructed in {}'.format(
+                            g.name, logic2.name, logic1.name))
                         return False
     return True
 
 
-def value_area_2(logic1, logic2, find):
+# ПРОВЕРКА ОЗ(5) ########################
+def sets_w(logic1, logic2, find):
     closure_sets = set()
 
-    # выбираю такие оз, которые замкнуты для всех f из logic1
-    for w in set(map(lambda f: frozenset(f.value_area), logic1.functions)):
+    # выбор таких оз, которые замкнуты для всех f из logic1
+    for w in set(map(lambda x: frozenset(x.value_area), logic1.functions)):
         is_closure = True
         for f in logic1.functions:
             if not f.set_is_closure(w):
@@ -88,14 +112,14 @@ def value_area_2(logic1, logic2, find):
             closure_sets.add(w)
 
     found_functions = []
-    # перебираю варианты для каждой искомой o
+    # перебор вариантов для каждой искомой o
     for o in logic2.functions:
-        o_closure = list(filter(lambda w: o.value_area > w and o.set_is_closure(w), closure_sets))
+        o_closure = list(filter(lambda x: o.value_area > x and o.set_is_closure(x), closure_sets))
 
         if len(o_closure) == 0:
             continue
 
-        # убираю вложенные w
+        # исключение вложенных w
         for i in range(len(o_closure)):
             for j in range(i+1, len(o_closure)):
                 if o_closure[i] >= o_closure[j]:
@@ -104,15 +128,20 @@ def value_area_2(logic1, logic2, find):
                     o_closure[i] = None
                     break
 
-        can = False
-        for w in tuple(filter(lambda w: w is not None, o_closure)):
-            if find([o], tuple(filter(lambda f: f.value_area > w, logic1.functions))):
+        can, tried_funcs = False, []
+        for w in tuple(filter(lambda x: x is not None, o_closure)):
+            funcs_w = tuple(filter(lambda x: x.value_area > w, logic1.functions))
+            need = find([o], funcs_w)
+            if len(need) == 0:
                 found_functions.append(o)
                 can = True
                 break
+            tried_funcs.extend(list(map(lambda x: x.name, funcs_w)))
 
         if not can:
-            logging.debug('    Can not built the ' + o.name)
+            logging.debug('function {} in {} cannot be constructed in the basis {} of {}'.format(
+                o.name, logic2.name, tried_funcs, logic1.name
+            ))
             return None
 
     return found_functions
