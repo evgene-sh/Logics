@@ -105,6 +105,8 @@ class AsymmetricComparator(LogicComparator):
                         tuple(tuple(f(i, i) for _ in values) for i in values))
                     tables.append(
                         tuple(tuple(f(j, j) for j in values) for _ in values))
+                    tables.append(
+                        tuple(f(i, i) for i in values))
                     if not f.is_symmetric:
                         tables.append(
                             tuple(tuple(f(j, i) for j in values) for i in values))

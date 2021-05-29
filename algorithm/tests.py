@@ -5,7 +5,7 @@ from main import algorithm
 class TestAlgorithm(unittest.TestCase):
 
     def go(self, lm, path):
-        for n, res in enumerate(algorithm(path)):
+        for n, res in enumerate(algorithm(path, False, False)):
             with self.subTest(i=n):
                 self.assertEqual(lm(res[0], res[1]), res[2], str(res[0]) + ' vs ' + str(res[1]))
 
@@ -68,7 +68,7 @@ class TestAlgorithm(unittest.TestCase):
 
     def test_compare_LM(self):
         import csv
-        with open('results/LM.csv', 'r') as a, open('../results/LM64alt.csv', 'r') as b:
+        with open('results/LM64.csv', 'r') as a, open('results/LM64alt.csv', 'r') as b:
             ra = csv.reader(a, delimiter=',')
             rb = csv.reader(b, delimiter=',')
             for rowa, rowb in zip(ra, rb):
