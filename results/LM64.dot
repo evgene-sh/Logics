@@ -1,0 +1,126 @@
+digraph {
+	graph [rankdir=BT]
+	0 [label="LevinMikenberg_2_10
+LevinMikenberg_4_10"]
+	1 [label="LevinMikenberg_1_5
+LevinMikenberg_2_5"]
+	2 [label="LevinMikenberg_1_4
+LevinMikenberg_4_1"]
+	3 [label="LevinMikenberg_1_8
+LevinMikenberg_4_8"]
+	4 [label="LevinMikenberg_1_3
+LevinMikenberg_3_1"]
+	5 [label="LevinMikenberg_1_15
+LevinMikenberg_3_15"]
+	6 [label=LevinMikenberg_2_15]
+	7 [label=LevinMikenberg_3_3]
+	8 [label="LevinMikenberg_1_6
+LevinMikenberg_2_6"]
+	9 [label="LevinMikenberg_2_7
+LevinMikenberg_4_7"]
+	10 [label="LevinMikenberg_1_12
+LevinMikenberg_4_12"]
+	11 [label="LevinMikenberg_2_3
+LevinMikenberg_3_2"]
+	12 [label=LevinMikenberg_4_16]
+	13 [label="LevinMikenberg_1_2
+LevinMikenberg_2_1"]
+	14 [label="LevinMikenberg_3_13
+LevinMikenberg_4_13"]
+	15 [label="LevinMikenberg_1_13
+LevinMikenberg_2_13"]
+	16 [label=LevinMikenberg_3_7]
+	17 [label="LevinMikenberg_3_5
+LevinMikenberg_4_5"]
+	18 [label="LevinMikenberg_2_11
+LevinMikenberg_3_11"]
+	19 [label="LevinMikenberg_3_14
+LevinMikenberg_4_14"]
+	20 [label="LevinMikenberg_2_16
+LevinMikenberg_3_16"]
+	21 [label=LevinMikenberg_1_7]
+	22 [label="LevinMikenberg_2_9
+LevinMikenberg_4_9"]
+	23 [label="LevinMikenberg_1_11
+LevinMikenberg_4_11"]
+	24 [label="LevinMikenberg_2_4
+LevinMikenberg_4_2"]
+	25 [label="LevinMikenberg_1_14
+LevinMikenberg_2_14"]
+	26 [label="LevinMikenberg_1_10
+LevinMikenberg_3_10"]
+	27 [label="LevinMikenberg_3_4
+LevinMikenberg_4_3"]
+	28 [label=LevinMikenberg_1_1]
+	29 [label=LevinMikenberg_4_15]
+	30 [label=LevinMikenberg_2_2]
+	31 [label=LevinMikenberg_3_6]
+	32 [label="LevinMikenberg_2_12
+LevinMikenberg_3_12"]
+	33 [label=LevinMikenberg_3_8]
+	34 [label=LevinMikenberg_2_8]
+	35 [label="LevinMikenberg_1_9
+LevinMikenberg_3_9"]
+	36 [label=LevinMikenberg_4_6]
+	37 [label=LevinMikenberg_1_16]
+	38 [label=LevinMikenberg_4_4]
+	27 -> 26
+	38 -> 24
+	2 -> 27
+	28 -> 13
+	27 -> 22
+	27 -> 3
+	27 -> 17
+	13 -> 1
+	4 -> 27
+	7 -> 16
+	28 -> 4
+	25 -> 19
+	12 -> 37
+	27 -> 20
+	4 -> 21
+	11 -> 32
+	24 -> 27
+	7 -> 31
+	38 -> 36
+	24 -> 0
+	13 -> 8
+	23 -> 18
+	27 -> 5
+	21 -> 9
+	27 -> 10
+	29 -> 6
+	27 -> 14
+	13 -> 25
+	28 -> 2
+	24 -> 6
+	13 -> 15
+	35 -> 22
+	27 -> 9
+	38 -> 2
+	13 -> 27
+	2 -> 23
+	38 -> 12
+	7 -> 11
+	7 -> 4
+	30 -> 24
+	32 -> 10
+	15 -> 14
+	6 -> 5
+	30 -> 13
+	0 -> 26
+	11 -> 34
+	38 -> 29
+	16 -> 21
+	37 -> 20
+	1 -> 17
+	30 -> 11
+	27 -> 19
+	33 -> 34
+	4 -> 35
+	34 -> 3
+	11 -> 27
+	27 -> 18
+	7 -> 33
+	2 -> 37
+}
