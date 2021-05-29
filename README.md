@@ -14,6 +14,7 @@
     <name of logic-1> and <name of logic-2> : relation
 
 Входной каталог должен быть размещен в DATA_PATH
+
 Выходные файлы будут сохраняться в RESULTS_PATH
 
 ### Interface 

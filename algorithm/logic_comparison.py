@@ -1,6 +1,6 @@
 """Алгоритмы анализа и сравнения логик"""
 
-from algorithm.logic import TableFunction
+from algorithm.structures.logic import TableFunction
 from algorithm import optimizations
 import logging
 from abc import ABC, abstractmethod

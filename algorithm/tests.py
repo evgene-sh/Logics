@@ -29,7 +29,7 @@ class TestAlgorithm(unittest.TestCase):
                 return 'embeds'
             return 'non-comparable'
 
-        self.go(lm, 'data/LM16/')
+        self.go(lm, '../data/LM16/')
 
     def test_LM_15_16(self):
 
@@ -42,7 +42,7 @@ class TestAlgorithm(unittest.TestCase):
 
             return 'non-comparable'
 
-        self.go(lm, 'data/LM1516/')
+        self.go(lm, '../data/LM1516/')
 
     def test_LM_115(self):
 
@@ -57,18 +57,18 @@ class TestAlgorithm(unittest.TestCase):
 
             return 'equivalent'
 
-        self.go(lm, 'data/LM115/')
+        self.go(lm, '../data/LM115/')
 
     def test_LM_17(self):
 
         def lm(l1, l2):
             return 'non-comparable'
 
-        self.go(lm, 'data/LM117/')
+        self.go(lm, '../data/LM117/')
 
     def test_compare_LM(self):
         import csv
-        with open('results/LM.csv', 'r') as a, open('results/LM64alt.csv', 'r') as b:
+        with open('results/LM.csv', 'r') as a, open('../results/LM64alt.csv', 'r') as b:
             ra = csv.reader(a, delimiter=',')
             rb = csv.reader(b, delimiter=',')
             for rowa, rowb in zip(ra, rb):

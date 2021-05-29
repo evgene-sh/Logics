@@ -1,14 +1,13 @@
-from algorithm.mvlog import Mvlog
-from algorithm.logic import Logic
+from algorithm.structures.mvlog import Mvlog
+from algorithm.structures.logic import Logic
 from algorithm.logic_comparison import AsymmetricComparator, SymmetricComparator, AggregatedComparator
 import itertools
 import os
-from sys import argv
 from algorithm.optimizations import Transitivity
 import logging
 from math import factorial
 from tqdm import tqdm
-from visualization import draw_graph
+from algorithm.visualization import draw_graph
 import argparse
 
 
@@ -75,8 +74,5 @@ if __name__ == '__main__':
         datefmt='%H:%M:%S'
     )
 
-    results = algorithm(args.input, args.csv, args.dot)
-
-    # if len(argv) == 2:
-    #     for res in results:
-    #         print(res[0], res[1], ':', res[2])
+    for res in algorithm(args.input, args.csv, args.dot):
+        print(res[0], res[1], ':', res[2])
