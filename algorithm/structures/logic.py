@@ -109,13 +109,12 @@ class TableFunction:
         self.value_area = TableFunction._value_area(self.data, self.dim)
 
     def __call__(self, *args):
-        data = self.data
-        for arg in args:
-            data = data[self.values[arg]]
-        return data
+        if len(args) == 1:
+            return self.data[self.values[args[0]]]
+        return self.data[self.values[args[0]]][self.values[args[1]]]
 
     def __str__(self):
-        return self.name + '\n' + '\n'.join([str(data) for data in self.data]) + '\n'
+        return self.name + '\n' + ('\n'.join([str(data) for data in self.data]) if self.dim==2 else str(self.data)) + '\n'
 
     def __repr__(self):
         return '\n' + self.__str__() + '\n'

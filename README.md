@@ -7,14 +7,12 @@
 * dot файла
 
 # Usage
-На вход – каталог с файлами mvlog 
-
+На вход – каталог с файлами mvlog  
 На выходе – последовательность строк вида:
 
     <name of logic-1> and <name of logic-2> : relation
 
-Входной каталог должен быть размещен в DATA_PATH
-
+Входной каталог должен быть размещен в DATA_PATH  
 Выходные файлы будут сохраняться в RESULTS_PATH
 
 ### Interface 
@@ -28,3 +26,7 @@
         -h, --help  show this help message and exit
         -csv        if you need to generate csv file
         -dot        if you need to generate dot file
+
+### Recommendations
+Для производительности программы, рекомендуется использовать интерпретатор PyPy3  
+Для корректной работы журналирования не следует запускать экземпляр программы параллельно
