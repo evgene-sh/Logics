@@ -172,12 +172,12 @@ class SymmetricComparator(LogicComparator):
 
                     need -= new
                     if len(need) == 0:
-                        return True
+                        return need
 
             to_check = new - checked
             checked.update(to_check)
 
-        return False
+        return need
 
     @staticmethod
     def _compose_functions(f, g, o):
@@ -211,7 +211,7 @@ class AggregatedComparator(AsymmetricComparator, SymmetricComparator):
 
                     need -= new
                     if len(need) == 0:
-                        return True
+                        return need
 
             for f in to_check:
                 for g in checked:
@@ -222,12 +222,12 @@ class AggregatedComparator(AsymmetricComparator, SymmetricComparator):
 
                     need -= new
                     if len(need) == 0:
-                        return True
+                        return need
 
             to_check = new - checked
             checked.update(to_check)
 
-        return False
+        return need
 
     @staticmethod
     def _compose_functions(*args):

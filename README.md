@@ -17,15 +17,16 @@
 
 ### Interface 
 
-    usage: main.py [-h] [-csv] [-dot] input
+    usage: main.py [-h] [-csv] [-dot] [-aggr] input
     
     positional arguments:
-        input
-
+      input       name of dir in DATA_PATH with mvlog files
+    
     optional arguments:
-        -h, --help  show this help message and exit
-        -csv        if you need to generate csv file
-        -dot        if you need to generate dot file
+      -h, --help  show this help message and exit
+      -csv        if you need to generate csv file
+      -dot        if you need to generate dot file
+      -aggr       if you want to run AggregatedComparator
 
 ### Recommendations
 Для производительности программы, рекомендуется использовать интерпретатор PyPy3  

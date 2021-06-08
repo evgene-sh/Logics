@@ -27,8 +27,9 @@ def get_logics(path):
     return [parse(file) for file in files]
 
 
-def algorithm(input_dir, need_csv, need_dot, comparator_class=AsymmetricComparator):
+def algorithm(input_dir, need_csv, need_dot, comparator_class):
     """Основной алгоритм"""
+
     input_path = DATA_PATH + input_dir + '/'
     output_path = RESULTS_PATH + input_dir
 
@@ -63,6 +64,7 @@ if __name__ == '__main__':
     argparser.add_argument('input', help='name of dir in DATA_PATH with mvlog files')
     argparser.add_argument('-csv', action='store_true', default=False, help='if you need to generate csv file')
     argparser.add_argument('-dot', action='store_true', default=False, help='if you need to generate dot file')
+    argparser.add_argument('-aggr', action='store_true', default=False, help='if you want to run AggregatedComparator')
 
     args = argparser.parse_args()
 
@@ -74,5 +76,5 @@ if __name__ == '__main__':
         datefmt='%H:%M:%S'
     )
 
-    for res in algorithm(args.input, args.csv, args.dot):
+    for res in algorithm(args.input, args.csv, args.dot, AggregatedComparator if args.aggr else AsymmetricComparator):
         print(res[0], res[1], ':', res[2])
