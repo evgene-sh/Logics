@@ -27,7 +27,7 @@ def get_logics(path):
     return [parse(file) for file in files]
 
 
-def algorithm(input_dir, need_csv, need_dot, comparator_class):
+def algorithm(input_dir, need_csv, need_dot, comparator_class=AsymmetricComparator):
     """Основной алгоритм"""
 
     input_path = DATA_PATH + input_dir + '/'

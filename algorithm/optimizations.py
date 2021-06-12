@@ -114,7 +114,7 @@ def sets_w(logic1, logic2, find):
     found_functions = []
     # перебор вариантов для каждой искомой o
     for o in logic2.functions:
-        o_closure = list(filter(lambda x: o.value_area > x and o.set_is_closure(x), closure_sets))
+        o_closure = list(filter(lambda x: o.value_area > x, closure_sets))
 
         if len(o_closure) == 0:
             continue
