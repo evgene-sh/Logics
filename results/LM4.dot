@@ -1,0 +1,36 @@
+digraph {
+	graph [rankdir=BT]
+	0 [label="LM(4,15)alt"]
+	1 [label="LM(4,10)alt"]
+	2 [label="LM(4,2)alt"]
+	3 [label="LM(4,14)alt"]
+	4 [label="LM(4,7)alt"]
+	5 [label="LM(4,5)alt"]
+	6 [label="LM(4,3)alt"]
+	7 [label="LM(4,4)
+LM(4,4)alt"]
+	8 [label="LM(4,16)alt"]
+	9 [label="LM(4,13)alt"]
+	10 [label="LM(4,11)alt"]
+	11 [label="LM(4,8)alt"]
+	12 [label="LM(4,6)alt"]
+	13 [label="LM(4,9)alt"]
+	14 [label="LM(4,1)alt"]
+	15 [label="LM(4,12)alt"]
+	7 -> 0
+	2 -> 1
+	2 -> 6
+	7 -> 2
+	6 -> 3
+	6 -> 4
+	6 -> 5
+	6 -> 9
+	6 -> 11
+	6 -> 13
+	14 -> 6
+	6 -> 15
+	7 -> 8
+	7 -> 12
+	7 -> 14
+	14 -> 10
+}

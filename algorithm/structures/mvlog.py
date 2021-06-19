@@ -2,7 +2,7 @@
 
 import re
 
-NAME_STR = 'Name *= *[A-Za-z0-9_]+\n'
+NAME_STR = 'Name *= *[A-Za-z0-9_,\(\)\+]+\n'
 VALUES_STR = 'Values *= *\[(\S+, *)*\S+\]\n'
 VALUE = '[^\s,]+'
 FUNCTION = '[A-Za-z0-9_]+ *\\{[^\\}]+\\}'

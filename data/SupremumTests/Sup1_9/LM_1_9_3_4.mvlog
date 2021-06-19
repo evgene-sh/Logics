@@ -1,0 +1,57 @@
+Name = LM(1,9)+LM(3,4)
+Values = [0, D, T, 1]
+
+And {
+  1 1 = 1;
+  s.x s.y = 0;
+}
+
+Or {
+  1 s.x = 1;
+  s.x 1 = 1;
+  s.x s.y = 0;
+}
+
+Imply {
+  1 1 = 1;
+  1 s.x = 0;
+  s.x s.y = 1;
+}
+
+Not {
+  1 = 0;
+  0 = 1;
+  T = T;
+  D = 1;
+}
+
+And2 {
+  0 s.x = 0;
+  s.x 0 = 0;
+  D s.x = 0;
+  s.x D = 0;
+  s.x s.y = 1;
+}
+
+Or2 {
+  1 s.x = 1;
+  s.x 1 = 1;
+  T s.x = 1;
+  s.x T = 1;
+  s.x s.y = 0;
+}
+
+Imply2 {
+  0 s.x = 1;
+  D s.x = 1;
+  s.x 1 = 1;
+  s.x T = 1;
+  s.x s.y = 0;
+}
+
+Not2 {
+  0 = 1;
+  T = 1;
+  s.x = 0;
+}
+

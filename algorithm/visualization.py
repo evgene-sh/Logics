@@ -35,5 +35,5 @@ def draw_graph(transitivity, output_path):
 
     for edge in edges:
         dot.edge(*edge)
-
-    dot.render(output_path+'.dot')
+    print(type(dot))
+    dot.render(output_path+'.dot', format='png')

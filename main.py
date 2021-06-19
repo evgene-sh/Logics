@@ -47,9 +47,9 @@ def algorithm(input_dir, need_csv, need_dot, comparator_class=AsymmetricComparat
     # csv output
     if need_csv:
         with open(output_path+'.csv', 'w') as file:
-            file.write(','.join(('logic1_name', 'logic2_name', 'relation')) + '\n')
+            file.write(' '.join(('logic1_name', 'logic2_name', 'relation')) + '\n')
             for name1, name2 in itertools.permutations(sorted([l.name for l in logics], key=lambda x: (len(x), x)), 2):
-                file.write(','.join([name1, name2, transitivity(name1, name2)]) + '\n')
+                file.write(' '.join([name1, name2, transitivity(name1, name2)]) + '\n')
 
     # dot output
     if need_dot:

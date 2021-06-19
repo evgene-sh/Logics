@@ -1,0 +1,126 @@
+digraph {
+	graph [rankdir=BT]
+	0 [label="LM(1,6)alt
+LM(2,6)alt"]
+	1 [label="LM(1,12)alt
+LM(4,12)alt"]
+	2 [label="LM(4,15)alt"]
+	3 [label="LM(1,11)alt
+LM(4,11)alt"]
+	4 [label="LM(1,9)alt
+LM(3,9)alt"]
+	5 [label="LM(3,6)alt"]
+	6 [label="LM(2,10)alt
+LM(4,10)alt"]
+	7 [label="LM(2,2)alt"]
+	8 [label="LM(2,4)alt
+LM(4,2)alt"]
+	9 [label="LM(1,13)alt
+LM(2,13)alt"]
+	10 [label="LM(3,14)alt
+LM(4,14)alt"]
+	11 [label="LM(2,3)alt
+LM(3,2)alt"]
+	12 [label="LM(3,5)alt
+LM(4,5)alt"]
+	13 [label="LM(1,14)alt
+LM(2,14)alt"]
+	14 [label="LM(2,16)alt
+LM(3,16)alt"]
+	15 [label="LM(2,11)alt
+LM(3,11)alt"]
+	16 [label="LM(1,10)alt
+LM(3,10)alt"]
+	17 [label="LM(3,3)alt"]
+	18 [label="LM(2,7)alt
+LM(4,7)alt"]
+	19 [label="LM(3,8)alt"]
+	20 [label="LM(2,12)alt
+LM(3,12)alt"]
+	21 [label="LM(1,2)alt
+LM(2,1)alt"]
+	22 [label="LM(1,7)alt"]
+	23 [label="LM(3,13)alt
+LM(4,13)alt"]
+	24 [label="LM(3,7)alt"]
+	25 [label="LM(1,5)alt
+LM(2,5)alt"]
+	26 [label="LM(2,15)alt"]
+	27 [label="LM(3,4)alt
+LM(4,3)alt"]
+	28 [label="LM(4,4)alt"]
+	29 [label="LM(2,9)alt
+LM(4,9)alt"]
+	30 [label="LM(4,16)alt"]
+	31 [label="LM(1,1)alt"]
+	32 [label="LM(1,8)alt
+LM(4,8)alt"]
+	33 [label="LM(1,3)alt
+LM(3,1)alt"]
+	34 [label="LM(1,4)alt
+LM(4,1)alt"]
+	35 [label="LM(1,16)alt"]
+	36 [label="LM(2,8)alt"]
+	37 [label="LM(4,6)alt"]
+	38 [label="LM(1,15)alt
+LM(3,15)alt"]
+	21 -> 0
+	20 -> 1
+	27 -> 1
+	2 -> 26
+	28 -> 2
+	3 -> 15
+	34 -> 3
+	4 -> 29
+	33 -> 4
+	17 -> 5
+	8 -> 6
+	6 -> 16
+	7 -> 8
+	7 -> 11
+	7 -> 21
+	8 -> 26
+	8 -> 27
+	28 -> 8
+	21 -> 9
+	9 -> 23
+	13 -> 10
+	27 -> 10
+	17 -> 11
+	11 -> 20
+	11 -> 27
+	11 -> 36
+	25 -> 12
+	27 -> 12
+	21 -> 13
+	27 -> 14
+	35 -> 14
+	27 -> 15
+	27 -> 16
+	17 -> 19
+	17 -> 24
+	17 -> 33
+	22 -> 18
+	27 -> 18
+	19 -> 36
+	21 -> 25
+	21 -> 27
+	31 -> 21
+	24 -> 22
+	33 -> 22
+	27 -> 23
+	26 -> 38
+	27 -> 29
+	27 -> 32
+	33 -> 27
+	34 -> 27
+	27 -> 38
+	28 -> 30
+	28 -> 34
+	28 -> 37
+	30 -> 35
+	31 -> 33
+	31 -> 34
+	36 -> 32
+	34 -> 35
+}

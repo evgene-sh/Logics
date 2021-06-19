@@ -3,7 +3,7 @@ import itertools
 
 class Logic:
     def __init__(self, mvlog):
-        self.name = mvlog.name.replace('LevinMikenberg', 'LM')
+        self.name = mvlog.name
         self.values = mvlog.values
         self.functions = self._parse(mvlog)
         self.eq_vals = self._get_equal_values()
