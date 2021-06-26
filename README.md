@@ -7,7 +7,7 @@ for the set of logics you can get results in these views:
 * dot file
 
 # Usage
-To the input – a catalog with mvlog files
+To the input – a catalog with mvlog files  
 At the output – a sequence of lines like:
 
     <name of logic-1> and <name of logic-2> : relation
