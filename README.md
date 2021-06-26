@@ -12,7 +12,7 @@ At the output – a sequence of lines like:
 
     <name of logic-1> and <name of logic-2> : relation
  
-Input catalog should be placed to the DATA_PATH
+Input catalog should be placed to the DATA_PATH  
 Output files will be saved to the RESULT_PATH
 
 ### Interface 
