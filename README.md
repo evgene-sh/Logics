@@ -29,5 +29,5 @@ Output files will be saved to the RESULT_PATH
       -aggr       if you want to run AggregatedComparator
 
 ### Recommendations
-You could to use PyPy3 interpreter for a greater speed
+You could to use PyPy3 interpreter for a greater speed  
 For correct writing of logging you should not to run program exemplars parallel
