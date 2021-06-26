@@ -1,19 +1,19 @@
 # About
-Фреймворк позволяет определять отношения вложенности на множестве многозначных логик
+The framework allows to determine relations of functional embedding on a set of multi-valued logics
 
-Для набора логик возможно получить результаты в виде 
-* последовательности строк
-* csv файла
-* dot файла
+for the set of logics you can get results in these views:
+* sequence of strings
+* csv file
+* dot file
 
 # Usage
-На вход – каталог с файлами mvlog  
-На выходе – последовательность строк вида:
+To the input – a catalog with mvlog files
+At the output – a sequence of lines like:
 
     <name of logic-1> and <name of logic-2> : relation
-
-Входной каталог должен быть размещен в DATA_PATH  
-Выходные файлы будут сохраняться в RESULTS_PATH
+ 
+Input catalog should be placed to the DATA_PATH
+Output files will be saved to the RESULT_PATH
 
 ### Interface 
 
@@ -29,5 +29,5 @@
       -aggr       if you want to run AggregatedComparator
 
 ### Recommendations
-Для производительности программы, рекомендуется использовать интерпретатор PyPy3  
-Для корректной работы журналирования не следует запускать экземпляр программы параллельно
+You could to use PyPy3 interpreter for a greater speed
+For correct writing of logging you should not to run program exemplars parallel
