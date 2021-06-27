@@ -38,8 +38,12 @@ def fill_transitivity(known, transitivity):
             if not transitivity(logic1, logic2):
                 if verdict == 'not-embeds':
                     non_final_result[logic1 + logic2] = (None, False)
+                elif verdict == 'is-embeds':
+                    non_final_result[logic1 + logic2] = (None, True)
                 elif verdict == 'not-embedded':
                     non_final_result[logic1 + logic2] = (False, None)
+                elif verdict == 'is-embedded':
+                    non_final_result[logic1 + logic2] = (True, None)
                 else:
                     transitivity.update(logic1, verdict, logic2)
     return non_final_result
