@@ -4,4 +4,5 @@ LM(2,1) LM(3,4) not-embedded
 LM(1,2) LM(3,4) not-embedded
 LM(3,3) LM(3,4) not-embedded
 LM(4,1) LM(3,4) not-embedded
+LM(4,1) LM(3,4) is-embedded
 LM(4,3) LM(2,1) not-embeds
