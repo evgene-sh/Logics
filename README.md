@@ -1,7 +1,7 @@
 # About
 The framework allows to determine relations of functional embedding on a set of multi-valued logics  
-[![DOI](https://zenodo.org/badge/352626913.svg)](https://zenodo.org/badge/latestdoi/352626913)
-for the set of logics you can get results in these views:
+[![DOI](https://zenodo.org/badge/352626913.svg)](https://zenodo.org/badge/latestdoi/352626913)  
+For the set of logics you can get results in these views:
 * sequence of strings
 * csv file
 * dot file
