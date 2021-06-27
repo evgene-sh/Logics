@@ -13,6 +13,8 @@ import argparse
 
 DATA_PATH = 'data/'
 RESULTS_PATH = 'results/'
+EXTERNAL_PATH = 'external/'
+SEPARATOR = ' '
 
 
 def parse(path):
@@ -27,7 +29,16 @@ def get_logics(path):
     return [parse(file) for file in files]
 
 
-def algorithm(input_dir, need_csv, need_dot, comparator_class=AsymmetricComparator):
+def fill_transitivity(known, transitivity):
+    with open(EXTERNAL_PATH + known + '.csv', 'r') as f:
+        next(f)
+        for line in f:
+            logic1, logic2, verdict = line.split(SEPARATOR)
+            if not transitivity(logic1, logic2):
+                transitivity.update(logic1, verdict.replace('\n', ''), logic2)
+
+
+def algorithm(input_dir, need_csv, need_dot, comparator_class=AsymmetricComparator, known=False):
     """Основной алгоритм"""
 
     input_path = DATA_PATH + input_dir + '/'
@@ -36,6 +47,9 @@ def algorithm(input_dir, need_csv, need_dot, comparator_class=AsymmetricComparat
     logics = get_logics(input_path)
     compare = comparator_class()
     transitivity = Transitivity([l.name for l in logics])
+
+    if known:
+        fill_transitivity(known, transitivity)
 
     cnt_pairs = int(factorial(len(logics))/(2*factorial((len(logics)-2))))
     for l1, l2 in tqdm(itertools.combinations(logics, 2),
@@ -47,9 +61,9 @@ def algorithm(input_dir, need_csv, need_dot, comparator_class=AsymmetricComparat
     # csv output
     if need_csv:
         with open(output_path+'.csv', 'w') as file:
-            file.write(' '.join(('logic1_name', 'logic2_name', 'relation')) + '\n')
+            file.write(SEPARATOR.join(('logic1_name', 'logic2_name', 'relation')) + '\n')
             for name1, name2 in itertools.permutations(sorted([l.name for l in logics], key=lambda x: (len(x), x)), 2):
-                file.write(' '.join([name1, name2, transitivity(name1, name2)]) + '\n')
+                file.write(SEPARATOR.join([name1, name2, transitivity(name1, name2)]) + '\n')
 
     # dot output
     if need_dot:
@@ -65,6 +79,7 @@ if __name__ == '__main__':
     argparser.add_argument('-csv', action='store_true', default=False, help='if you need to generate csv file')
     argparser.add_argument('-dot', action='store_true', default=False, help='if you need to generate dot file')
     argparser.add_argument('-aggr', action='store_true', default=False, help='if you want to run AggregatedComparator')
+    argparser.add_argument('-know', nargs='?', default=False, help='csv file with known results')
 
     args = argparser.parse_args()
 
@@ -76,5 +91,5 @@ if __name__ == '__main__':
         datefmt='%H:%M:%S'
     )
 
-    for res in algorithm(args.input, args.csv, args.dot, AggregatedComparator if args.aggr else AsymmetricComparator):
+    for res in algorithm(args.input, args.csv, args.dot, AggregatedComparator if args.aggr else AsymmetricComparator, args.know):
         print(res[0], res[1], ':', res[2])

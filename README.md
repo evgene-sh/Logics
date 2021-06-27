@@ -17,16 +17,21 @@ Output files will be saved to the RESULT_PATH
 
 ### Interface 
 
-    usage: main.py [-h] [-csv] [-dot] [-aggr] input
-    
+    usage: main.py [-h] [-csv] [-dot] [-aggr]
+               [-know [KNOW]]
+               input
+
     positional arguments:
-      input       name of dir in DATA_PATH with mvlog files
+      input         name of dir in DATA_PATH with
+                    mvlog files
     
     optional arguments:
-      -h, --help  show this help message and exit
-      -csv        if you need to generate csv file
-      -dot        if you need to generate dot file
-      -aggr       if you want to run AggregatedComparator
+      -h, --help    show this help message and exit
+      -csv          if you need to generate csv file
+      -dot          if you need to generate dot file
+      -aggr         if you want to run AggregatedComparator
+      -know [KNOW]  csv file with known results
+
 
 ### Recommendations
 You could to use PyPy3 interpreter for a greater speed  
