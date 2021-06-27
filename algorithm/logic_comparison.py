@@ -7,9 +7,11 @@ from abc import ABC, abstractmethod
 
 
 class LogicComparator(ABC):
-    def __call__(self, logic1, logic2):
-        dominance1 = self.check_dominance(logic1, logic2)
-        dominance2 = self.check_dominance(logic2, logic1)
+    def __call__(self, logic1, logic2, dominance1=None, dominance2=None):
+        if dominance1 is None:
+            dominance1 = self.check_dominance(logic1, logic2)
+        if dominance2 is None:
+            dominance2 = self.check_dominance(logic2, logic1)
 
         if dominance1 and dominance2:
             return 'equivalent'

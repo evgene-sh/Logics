@@ -32,10 +32,17 @@ def get_logics(path):
 def fill_transitivity(known, transitivity):
     with open(EXTERNAL_PATH + known + '.csv', 'r') as f:
         next(f)
+        non_final_result = dict()
         for line in f:
-            logic1, logic2, verdict = line.split(SEPARATOR)
+            logic1, logic2, verdict = line.replace('\n', '').split(SEPARATOR)
             if not transitivity(logic1, logic2):
-                transitivity.update(logic1, verdict.replace('\n', ''), logic2)
+                if verdict == 'not-embeds':
+                    non_final_result[logic1 + logic2] = (None, False)
+                elif verdict == 'not-embedded':
+                    non_final_result[logic1 + logic2] = (False, None)
+                else:
+                    transitivity.update(logic1, verdict, logic2)
+    return non_final_result
 
 
 def algorithm(input_dir, need_csv, need_dot, comparator_class=AsymmetricComparator, known=False):
@@ -48,14 +55,16 @@ def algorithm(input_dir, need_csv, need_dot, comparator_class=AsymmetricComparat
     compare = comparator_class()
     transitivity = Transitivity([l.name for l in logics])
 
+    non_final_result = {}  # for using -know key
     if known:
-        fill_transitivity(known, transitivity)
+        non_final_result = fill_transitivity(known, transitivity)
 
     cnt_pairs = int(factorial(len(logics))/(2*factorial((len(logics)-2))))
     for l1, l2 in tqdm(itertools.combinations(logics, 2),
                        total=cnt_pairs, bar_format='{l_bar}{bar}| {n_fmt}/{total_fmt} {elapsed}'):
         if not transitivity(l1.name, l2.name):
-            result = compare(l1, l2)
+            d1, d2 = non_final_result.get(l1.name+l2.name, (None, None))
+            result = compare(l1, l2, dominance1=d1, dominance2=d2)
             transitivity.update(l1.name, result, l2.name)
 
     # csv output
